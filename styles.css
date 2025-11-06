@@ -1,0 +1,197 @@
+/* Basic Reset and Variables */
+:root {
+    --light-blue: #e0f7fa; /* The background color */
+    --main-text-color: #333;
+    --card-bg-color: #fff;
+    --border-color: #ccc;
+    --tag-bg-color: #f0f0f0;
+    --tag-text-color: #555;
+    --button-color: #000;
+    --button-text-color: #fff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif; /* Use a clean, readable font */
+}
+
+body {
+    background-color: var(--light-blue);
+    color: var(--main-text-color);
+    padding-bottom: 50px; /* Space at the bottom */
+}
+
+/* --- Header/Navbar --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    width: 100%;
+}
+
+.logo {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--main-text-color);
+    font-size: 0.9em;
+}
+
+.button {
+    background-color: var(--button-color);
+    color: var(--button-text-color);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+/* --- Main Content --- */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.main-title {
+    text-align: center;
+    font-size: 3em;
+    margin: 50px 0 30px;
+}
+
+/* --- Search Bar Area --- */
+.search-container {
+    width: 60%;
+    max-width: 700px;
+    margin: 0 auto 50px;
+    background-color: var(--card-bg-color);
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    padding: 10px 15px;
+}
+
+.input-field {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.input-field input {
+    flex-grow: 1;
+    border: none;
+    padding: 5px 10px;
+    font-size: 1em;
+    outline: none;
+}
+
+.arrow-icon, .close-icon {
+    font-size: 1.2em;
+    padding: 0 5px;
+    color: var(--tag-text-color);
+    cursor: pointer;
+}
+
+.tags-container {
+    display: flex;
+    gap: 10px;
+    padding-top: 5px;
+}
+
+.tag {
+    background-color: var(--tag-bg-color);
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 0.8em;
+    color: var(--tag-text-color);
+    display: flex;
+    align-items: center;
+}
+
+.tag-close {
+    margin-left: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* --- Search Results --- */
+.results-heading {
+    font-size: 1.8em;
+    margin: 50px 0 20px 0;
+    font-weight: normal;
+}
+
+.results-grid {
+    display: grid;
+    /* Create 4 equal columns for the cards */
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 20px;
+}
+
+.result-card {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.image-placeholder {
+    /* To simulate the card image's aspect ratio */
+    width: 100%;
+    padding-top: 100%; /* Creates a square aspect ratio */
+    background-color: var(--light-blue);
+    /* The placeholder text inside the image block */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.8em;
+    color: var(--tag-text-color);
+    border-radius: 3px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="20">Petr Image</text></svg>');
+    background-size: cover;
+    background-repeat: no-repeat;
+    /* NOTE: You'd replace this with an actual image in a real project */
+}
+
+.card-details {
+    padding: 5px 0;
+}
+
+.petr-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.card-tags {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.card-tag {
+    background-color: var(--tag-bg-color);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.7em;
+    color: var(--tag-text-color);
+    display: flex;
+    align-items: center;
+}
