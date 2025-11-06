@@ -1,8 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import HomePage from '../app/page.jsx'
-import PetrdexPage from '../app/petrdex/page.jsx'
-import ProfilePage from '../app/profile/page.jsx'
-import UploadPage from '../app/upload/page.jsx'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import HomePage from '../app/page.jsx';
+import PetrdexPage from '../app/petrdex/page.jsx';
+import ProfilePage from '../app/profile/page.jsx';
+import UploadPage from '../app/upload/page.jsx';
+import Auth from './Auth.jsx';
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
             <Link to="/petrdex" className="hover:text-gray-300">Petrdex</Link>
             <Link to="/profile" className="hover:text-gray-300">Profile</Link>
             <Link to="/upload" className="hover:text-gray-300">Upload</Link>
+            <Link to="/auth" className="hover:text-gray-300">Login</Link>
           </div>
         </nav>
         <main>
@@ -22,9 +24,10 @@ export default function App() {
             <Route path="/petrdex" element={<PetrdexPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/upload" element={<UploadPage />} />
+            <Route path="/auth" element={<Auth />} />
           </Routes>
         </main>
       </div>
     </Router>
-  )
+  );
 }
