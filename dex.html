@@ -27,6 +27,8 @@
             padding: 40px 20px;
             font-family: 'Press Start 2P', monospace;
             position: relative;
+            opacity: 0;
+            transition: opacity 0.3s ease-in;
         }
 
         body::before {
@@ -487,6 +489,37 @@
 
         // Initialize
         renderGallery();
+
+        // Fade in the page when loaded
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '1';
+        });
+
+        // Page Transition for navigation
+        function handleNavigation(e) {
+            const link = e.currentTarget;
+            // Don't handle external links or special cases
+            if (link.getAttribute('href').startsWith('http') || 
+                (link.id === 'loginBtn' && localStorage.getItem('loggedInUser'))) {
+                return;
+            }
+            
+            e.preventDefault();
+            const targetHref = link.getAttribute('href');
+            
+            // Fade out the current page
+            document.body.style.opacity = '0';
+            
+            // Navigate after fade animation
+            setTimeout(() => {
+                window.location.href = targetHref;
+            }, 300);
+        }
+
+        // Apply to all navigation buttons
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', handleNavigation);
+        });
 
         // Login/Logout toggle
         let isLoggedIn = false;
