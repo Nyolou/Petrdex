@@ -22,14 +22,18 @@
         color:var(--muted);
         -webkit-font-smoothing:antialiased;
       }
-      .nav-buttons{display:flex;justify-content:center;gap:15px;padding:18px}
+  /* keep nav above the banner visually */
+  .nav-buttons{display:flex;justify-content:center;gap:15px;padding:18px;position:relative;z-index:3}
       .nav-btn{padding:8px 16px;border:2px solid var(--accent);border-radius:8px;background:var(--bg);color:var(--muted);text-decoration:none}
 
       .banner{
         height:90px;
         background: linear-gradient(135deg, rgba(212,165,116,0.9), rgba(180,138,90,0.9));
         display:flex;align-items:flex-end;padding:20px;border-bottom:6px solid rgba(0,0,0,0.03);
-        position:relative;overflow:hidden
+        position:relative;overflow:hidden;
+        /* pull banner up so it sits behind the navigation buttons */
+        margin-top: -58px;
+        z-index:1;
       }
       .banner::after{content:'';position:absolute;right:-40px;bottom:-40px;width:240px;height:240px;background-image:url('/petrfav.png');background-size:contain;opacity:0.06;transform:rotate(-20deg)}
 
@@ -105,10 +109,10 @@
     <script>
       // Sample user data and collection IDs (use existing petr_images)
       const user = {
-        name: 'SampleName',
-        handle: '@sample_user',
+        name: 'Zoey',
+        handle: '@zoey_uc',
         bio: 'Collector of rare Petrs, coffee enthusiast, and UCI student. Loves swapping stickers and finding new drops around campus.',
-        joined: '2025',
+        joined: '2022',
         collection: [1,2,5,8,10]
       };
 
