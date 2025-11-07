@@ -525,6 +525,81 @@
         100% { transform: scale(1.2) rotate(15deg); opacity: 1; }
       }
 
+      /* Animated rainbow stars and eye-catching title */
+      .home-header {
+        text-align: center;
+        margin-bottom: 1.5em;
+      }
+
+      .rainbow-stars {
+        display: flex;
+        justify-content: center;
+        gap: 1.5em;
+        margin-bottom: 0.5em;
+        position: relative;
+      }
+
+      .star {
+        font-size: 2.2rem;
+        animation: floatStar 2.5s ease-in-out infinite;
+        animation-delay: calc(var(--i) * 0.4s);
+        background: linear-gradient(120deg, #ff8a00, #e52e71, #4facfe, #43e97b);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 8px #fff6);
+      }
+
+      @keyframes floatStar {
+        0%, 100% { transform: translateY(0) scale(1) rotate(0deg);}
+        40% { transform: translateY(-18px) scale(1.15) rotate(12deg);}
+        60% { transform: translateY(10px) scale(0.95) rotate(-8deg);}
+      }
+
+      .petrdex-title {
+        font-size: 3.5rem;
+        font-family: 'Fredoka One', 'Comic Sans MS', cursive, sans-serif;
+        background: linear-gradient(90deg, #ff8a00, #e52e71, #4facfe, #43e97b);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        -webkit-text-fill-color: transparent;
+        font-weight: bold;
+        text-shadow: 0 4px 24px rgba(0,0,0,0.18), 0 1px 0 #fff;
+        margin-bottom: 0.3em;
+        text-align: center;
+        position: relative;
+      }
+
+      .petrdex-subtitle {
+        font-size: 1.5rem;
+        font-family: 'Quicksand', 'Arial Rounded MT Bold', Arial, sans-serif;
+        color: #6f86d6;
+        font-weight: 500;
+        letter-spacing: 1px;
+        margin-bottom: 1.2em;
+        text-align: center;
+        text-shadow: 0 2px 12px rgba(180,138,90,0.12);
+      }
+
+      .home-description {
+        max-width: 600px;
+        margin: 2.5em auto 0 auto;
+        background: linear-gradient(120deg, #f8efe3 80%, #e9f7fe 100%);
+        border-radius: 18px;
+        padding: 1.5em 2em;
+        font-size: 1.18rem;
+        color: #5a4633;
+        font-family: 'Quicksand', 'Arial Rounded MT Bold', Arial, sans-serif;
+        line-height: 1.7;
+        box-shadow: 0 4px 24px rgba(212,165,116,0.10);
+        text-align: center;
+        letter-spacing: 0.5px;
+      }
+
+      /* ...existing styles... */
+
     </style>
   </head>
   <body>
@@ -538,6 +613,22 @@
     </div>
 
     <div id="homepage-content">
+      <!-- Animated rainbow stars and eye-catching title -->
+      <div class="home-header">
+        <div class="rainbow-stars">
+          <span class="star" style="--i:0;">✦</span>
+          <span class="star" style="--i:1;">★</span>
+          <span class="star" style="--i:2;">✦</span>
+          <span class="star" style="--i:3;">★</span>
+          <span class="star" style="--i:4;">✦</span>
+        </div>
+        <h1 class="petrdex-title">Welcome to Petrdex</h1>
+        <h2 class="petrdex-subtitle">The ultimate archive of Petr stickers at UC Irvine!</h2>
+      </div>
+      <div class="home-description">
+        Petrdex is a community-driven archive dedicated to cataloging every Petr sticker found across UC Irvine. Browse, upload, and share your discoveries with fellow anteaters!
+      </div>
+
       <div class="nav-buttons">
         <a href="index.html" class="nav-btn">Home</a>
         <a href="dex.html" class="nav-btn">Petrdex</a>
@@ -546,16 +637,8 @@
         <a href="login.html" class="nav-btn" id="loginBtn">Login</a>
       </div>
 
-      <h1>Welcome to Petrdex — the ultimate archive of Petr stickers at UC Irvine!</h1>
-      <p>Petrdex is a community-driven digital Pokédex-style catalog dedicated to the legendary world of Petrs — the students who create and distribute the beloved Petr stickers you see across campus. Each Petr and sticker has its own entry, complete with sightings, variations, lore, and creator info (when known 👀).</p>
-      <p>Whether you're a collector, a trader, or simply a fan of the culture, Petrdex helps you:</p>
-      <ul>
-        <li>Discover rare, seasonal, and iconic Petr stickers</li>
-        <li>Track your personal sticker collection</li>
-        <li>Learn about the artists and the stories behind each Petr</li>
-        <li>Celebrate the creativity that makes UCI's community so uniquely chaotic and wholesome</li>
-      </ul>
-      <p>Petrdex isn't just a database — it's a living record of campus culture.</p>
+      <!-- Removed old h1 and intro paragraph here -->
+
       <p class="tagline">Catch them. Collect them. Cherish them.</p>
       <a href="dex.html" class="nav-button">Explore the Petrdex Gallery →</a>
 
