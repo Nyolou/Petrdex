@@ -134,6 +134,17 @@
         background:#b8945f; border-color:#a0844f;
       }
 
+      /* Page transition effects */
+      .fade-out-page {
+        opacity: 0 !important;
+        transition: opacity 0.4s ease-out;
+      }
+
+      body {
+        opacity: 1;
+        transition: opacity 0.4s ease-in;
+      }
+
       #welcome-video {
         position: absolute;
         top: 0;
@@ -224,6 +235,23 @@
           }, 200);
         }
       });
+
+      // ---------------- Page Transition ----------------
+      document.querySelector('.nav-button').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent immediate navigation
+        const targetHref = this.getAttribute('href');
+        
+        // Fade out the current page
+        document.body.classList.add('fade-out-page');
+        
+        // Navigate after fade animation
+        setTimeout(() => {
+          window.location.href = targetHref;
+        }, 400);
+      });
+
+      // Ensure page fades in when loaded
+      document.body.style.opacity = '1';
 
       // ---------------- Login/Logout Button ----------------
       const loginBtn = document.getElementById('loginBtn');
