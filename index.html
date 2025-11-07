@@ -134,6 +134,31 @@
         background:#b8945f; border-color:#a0844f;
       }
 
+      /* Skip intro button (matches .nav-button style) */
+      .skip-button {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 40px;
+        display: none; /* shown only when video is playing */
+        padding:12px 32px;
+        background:#d4a574;
+        color:#fff;
+        text-decoration:none;
+        border-radius:8px;
+        font-size:0.8em;
+        font-weight:bold;
+        border:2px solid #b8945f;
+        box-shadow:0 6px 20px rgba(139,69,19,0.35);
+        transition: all 0.25s ease;
+        z-index: 2;
+      }
+
+      .skip-button:hover {
+        transform: translateX(-50%) translateY(-3px);
+        background:#b8945f;
+      }
+
       /* Page transition effects */
       .fade-out-page {
         opacity: 0 !important;
@@ -168,6 +193,8 @@
         <source src="./mainpage-banner1.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
+      <!-- Skip button: visible only while the intro video is playing -->
+      <a href="#" id="skipBtn" class="skip-button">Skip Intro</a>
     </div>
 
     <div id="homepage-content">
@@ -199,10 +226,21 @@
         const welcomeScreen = document.getElementById('welcome-screen');
         const welcomeVideo = document.getElementById('welcome-video');
         const homepageContent = document.getElementById('homepage-content');
+        const skipBtn = document.getElementById('skipBtn');
 
         // Initially hide homepage content
         homepageContent.style.opacity = '0';
         homepageContent.style.transition = 'opacity 1s ease-in';
+
+        // Show skip button while video is active
+        if (skipBtn) {
+          skipBtn.style.display = 'block';
+          // Clicking skip will show the homepage immediately
+          skipBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            showHomepage();
+          });
+        }
 
         // Error handling for video
         welcomeVideo.addEventListener('error', function(e) {
@@ -224,6 +262,8 @@
         });
 
         function showHomepage() {
+          // hide skip button immediately
+          if (skipBtn) skipBtn.style.display = 'none';
           welcomeScreen.classList.add('fade-out');
           // Show homepage content with minimal delay
           setTimeout(() => {
