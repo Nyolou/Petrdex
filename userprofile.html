@@ -140,28 +140,57 @@
       <div style="margin-left:12px;color:#fff;font-size:1.2em;z-index:1">User Profile</div>
     </div>
 
-    <div class="profile-card">
-      <div>
-        <div class="avatar" id="avatar"></div>
-        <div style="margin-top:12px;display:flex;gap:8px">
-          <a class="nav-btn" id="followBtn" href="#">Follow</a>
-          <a class="nav-btn" href="dex.html">View All</a>
+      <div class="profile-card">
+        <div>
+          <div class="avatar" id="avatar"></div>
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <a class="nav-btn" id="followBtn" href="#">Follow</a>
+            <a class="nav-btn" href="dex.html">View All</a>
+          </div>
+          <button class="nav-btn" id="editProfileBtn" style="margin-top:16px;display:none">Edit Profile</button>
+        </div>
+
+        <div class="profile-meta">
+          <div class="displayname-row">
+            <h1 id="displayName"></h1>
+            <span id="collectorBadge" class="collector-badge">Petr Collector</span>
+          </div>
+          <div class="handle" id="handle"></div>
+          <div class="bio" id="bio"></div>
+          <div class="stats">
+            <div class="stat"><strong id="colCount"></strong> Collection</div>
+            <div class="stat"><strong id="joined"></strong> Joined</div>
+          </div>
+          <div id="socialLinks" style="margin-top:18px;display:flex;flex-direction:column;gap:8px;"></div>
+          </div>
         </div>
       </div>
 
-      <div class="profile-meta">
-        <div class="displayname-row">
-          <h1 id="displayName"></h1>
-          <span id="collectorBadge" class="collector-badge">Petr Collector</span>
-        </div>
-        <div class="handle" id="handle"></div>
-        <div class="bio" id="bio"></div>
-        <div class="stats">
-          <div class="stat"><strong id="colCount"></strong> Collection</div>
-          <div class="stat"><strong id="joined"></strong> Joined</div>
-        </div>
+      <!-- Edit Profile Modal -->
+      <div id="editProfileModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.25);z-index:99999;align-items:center;justify-content:center;">
+        <form id="editProfileForm" style="background:#fff;padding:32px 24px;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.18);max-width:340px;width:90%;display:flex;flex-direction:column;gap:18px;align-items:center;">
+          <h2 style="font-size:1em;margin-bottom:8px;color:#6b5a4a;">Edit Profile</h2>
+          <label style="font-size:0.8em;color:#8b7355;">Profile Emoji<br>
+            <div id="emojiPicker" style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:8px;margin-bottom:8px;">
+              <!-- emojis injected by JS -->
+            </div>
+          </label>
+          <div id="profilePicPreview" style="width:100px;height:100px;border-radius:8px;background:#eee;overflow:hidden;margin-bottom:8px;display:none;font-size:3em;align-items:center;justify-content:center;text-align:center;"></div>
+          <label style="font-size:0.8em;color:#8b7355;">Bio<br>
+            <textarea id="bioInput" rows="3" style="width:100%;font-family:'Press Start 2P',monospace;font-size:0.7em;margin-top:6px;"></textarea>
+          </label>
+          <label style="font-size:0.8em;color:#8b7355;width:100%;">Instagram<br>
+            <input type="text" id="instagramInput" placeholder="@yourhandle" style="width:100%;font-family:'Press Start 2P',monospace;font-size:0.7em;margin-top:6px;">
+          </label>
+          <label style="font-size:0.8em;color:#8b7355;width:100%;">Discord<br>
+            <input type="text" id="discordInput" placeholder="yourdiscord#0000" style="width:100%;font-family:'Press Start 2P',monospace;font-size:0.7em;margin-top:6px;">
+          </label>
+          <div style="display:flex;gap:12px;margin-top:8px;">
+            <button type="submit" class="nav-btn">Save</button>
+            <button type="button" class="nav-btn" id="cancelEditBtn">Cancel</button>
+          </div>
+        </form>
       </div>
-    </div>
 
     <div class="collection">
       <h2>Collection</h2>
@@ -194,7 +223,8 @@
       });
 
       // ----- try to load profile from API (JWT) or fallback to localStorage user -----
-      async function loadProfile() {
+  let currentUser = null;
+  async function loadProfile() {
         // Prefer JWT token if present
         const token = localStorage.getItem('token');
         let user = null;
@@ -240,22 +270,144 @@
           return;
         }
 
-        renderProfile(user);
+  currentUser = user;
+  renderProfile(user);
       }
 
       // ----- render profile & collection -----
-      function renderProfile(user) {
+  function renderProfile(user) {
         document.getElementById('displayName').textContent = user.username;
         document.getElementById('handle').textContent = '@' + user.username;
         document.getElementById('bio').textContent = user.bio || 'This user has no bio yet.';
         document.getElementById('joined').textContent = new Date(user.createdAt || Date.now()).getFullYear();
+        // Show collection count
+        document.getElementById('colCount').textContent = (user.collection && user.collection.length) ? user.collection.length : 0;
 
         const avatarEl = document.getElementById('avatar');
-        if (user.avatar) {
-          avatarEl.innerHTML = `<img src="${user.avatar}" alt="avatar" onerror="this.style.display='none'; this.parentElement.textContent='👤'">`;
+        // If avatar is a single emoji character, show it as text, fit to box
+        if (user.avatar && /^([\u{1F300}-\u{1FAFF}]|[\u{1F600}-\u{1F64F}]|[\u{1F680}-\u{1F6FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|[\u{1F900}-\u{1F9FF}]|[\u{1F1E6}-\u{1F1FF}])$/u.test(user.avatar)) {
+          avatarEl.innerHTML = `<span style=\"font-size:4em;display:flex;align-items:center;justify-content:center;width:100%;height:100%;\">${user.avatar}</span>`;
+        } else if (user.avatar) {
+          avatarEl.innerHTML = `<img src=\"${user.avatar}\" alt=\"avatar\" onerror=\"this.style.display='none'; this.parentElement.textContent='👤'\">`;
         } else {
           avatarEl.textContent = '👤';
         }
+
+        // Show social links
+        const socialLinks = document.getElementById('socialLinks');
+        socialLinks.innerHTML = '';
+        if (user.instagram) {
+          socialLinks.innerHTML += `<div style='display:flex;align-items:center;gap:6px;'><img src='attached_assets/instagram_logo.png' alt='Instagram' style='width:20px;height:20px;'> <a href='https://instagram.com/${user.instagram.replace(/^@/,"")}' target='_blank' style='color:#d6249f;text-decoration:none;font-size:0.7em;'>${user.instagram}</a></div>`;
+        }
+        if (user.discord) {
+          socialLinks.innerHTML += `<div style='display:flex;align-items:center;gap:6px;'><img src='attached_assets/discord_logo.png' alt='Discord' style='width:20px;height:20px;'> <span style='color:#5865F2;font-size:0.7em;'>${user.discord}</span></div>`;
+        }
+
+        // Show Edit Profile button only for logged-in user viewing their own profile
+        const editBtn = document.getElementById('editProfileBtn');
+        if (localStorage.getItem('loggedInUser') === user.username) {
+          editBtn.style.display = 'inline-block';
+        } else {
+          editBtn.style.display = 'none';
+        }
+  // --- Edit Profile Modal Logic ---
+      const modal = document.getElementById('editProfileModal');
+      const form = document.getElementById('editProfileForm');
+      const picInput = document.getElementById('profilePicInput');
+      const picPreview = document.getElementById('profilePicPreview');
+      const bioInput = document.getElementById('bioInput');
+      const cancelBtn = document.getElementById('cancelEditBtn');
+
+      if (editBtn) {
+        editBtn.onclick = function() {
+          modal.style.display = 'flex';
+          bioInput.value = currentUser.bio || '';
+          document.getElementById('instagramInput').value = currentUser.instagram || '';
+          document.getElementById('discordInput').value = currentUser.discord || '';
+          // Show emoji preview
+          if (currentUser.avatar && /^\p{Emoji}$/u.test(currentUser.avatar)) {
+            picPreview.style.display = 'block';
+            picPreview.innerHTML = currentUser.avatar;
+          } else {
+            picPreview.style.display = 'none';
+            picPreview.innerHTML = '';
+          }
+          // Highlight selected emoji
+          const emojiEls = document.querySelectorAll('#emojiPicker .emoji-choice');
+          emojiEls.forEach(el => {
+            if (el.textContent === currentUser.avatar) {
+              el.classList.add('selected');
+            } else {
+              el.classList.remove('selected');
+            }
+          });
+        };
+      }
+
+      if (cancelBtn) {
+        cancelBtn.onclick = function() {
+          modal.style.display = 'none';
+        };
+      }
+
+      if (picInput) {
+        // Remove file input logic, replaced by emoji picker
+      }
+
+      if (form) {
+        form.onsubmit = function(e) {
+          e.preventDefault();
+          const users = JSON.parse(localStorage.getItem('users') || '[]');
+          const logged = localStorage.getItem('loggedInUser');
+          const idx = users.findIndex(u => u.username === logged);
+          if (idx !== -1) {
+            users[idx].bio = bioInput.value;
+            users[idx].instagram = document.getElementById('instagramInput').value.trim();
+            users[idx].discord = document.getElementById('discordInput').value.trim();
+            // Get selected emoji
+            const selectedEmoji = document.querySelector('#emojiPicker .selected');
+            if (selectedEmoji) {
+              users[idx].avatar = selectedEmoji.textContent;
+            }
+            localStorage.setItem('users', JSON.stringify(users));
+            modal.style.display = 'none';
+            loadProfile();
+          }
+        };
+      // --- Emoji Picker Logic ---
+      const emojiList = [
+        '😀','😎','🥳','😺','🐶','🐱','🦊','🐻','🐼','🦁',
+        '🐸','🐵','🦄','🐲','👾','🤖','🧸','🍕','🌈','⭐'
+      ];
+      const emojiPicker = document.getElementById('emojiPicker');
+      const picPreview = document.getElementById('profilePicPreview');
+      if (emojiPicker) {
+        emojiPicker.innerHTML = '';
+        emojiList.forEach(emoji => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'emoji-choice';
+          btn.textContent = emoji;
+          btn.style.fontSize = '2em';
+          btn.style.background = 'none';
+          btn.style.border = '2px solid #eee';
+          btn.style.borderRadius = '8px';
+          btn.style.cursor = 'pointer';
+          btn.style.transition = 'border-color 0.2s';
+          btn.onclick = function() {
+            document.querySelectorAll('#emojiPicker .emoji-choice').forEach(el => el.classList.remove('selected'));
+            btn.classList.add('selected');
+            picPreview.style.display = 'block';
+            picPreview.innerHTML = emoji;
+          };
+          emojiPicker.appendChild(btn);
+        });
+      }
+      // Add selected style
+      const style = document.createElement('style');
+      style.textContent = `.emoji-choice.selected { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }`;
+      document.head.appendChild(style);
+      }
 
         // Show collector badge if the user has more than X collection items OR some flag
         const badgeEl = document.getElementById('collectorBadge');
