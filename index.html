@@ -9,6 +9,73 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
+      /* Header and footer bars to match login.html */
+      .main-header-bar {
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        background: linear-gradient(135deg, rgba(212,165,116,0.9), rgba(180,138,90,0.9));
+        padding: 20px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        margin-bottom: 20px;
+        overflow: hidden;
+      }
+      .main-footer-bar {
+        width: 100vw;
+        position: relative;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+        background: linear-gradient(135deg, rgba(212,165,116,0.9), rgba(180,138,90,0.9));
+        padding: 20px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .main-header-bar .rainbow-stars {
+        margin: 0;
+        gap: 2.2em;
+        align-items: center;
+      }
+      .main-footer-bar .footer-logo { color: #f5e6d3; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+      .main-footer-bar::before,
+      .main-footer-bar::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        width: 250px;
+        height: 2px;
+        background: linear-gradient(
+          to right,
+          rgba(245, 230, 211, 0) 0%,
+          rgba(245, 230, 211, 0.4) 100%
+        );
+      }
+      .main-footer-bar::before {
+        right: 60%;
+      }
+      .main-footer-bar::after {
+        left: 60%;
+      }
+      .main-footer-bar .footer-logo::before,
+      .main-footer-bar .footer-logo::after {
+        content: '✧';
+        font-size: 0.7em;
+        color: #f5e6d3;
+        position: relative;
+        top: -5px;
+        margin: 0 15px;
+        animation: twinkleSmall 1.5s infinite ease-in-out alternate;
+      }
+      .main-footer-bar .footer-logo { font-size: 1.8em; font-family: 'Press Start 2P', monospace; position: relative; display: inline-block; }
       /* ------------------ Your existing styles ------------------ */
       body {
         background: #f5e6d3;
@@ -541,14 +608,16 @@
 
       .star {
         font-size: 2.2rem;
-        animation: floatStar 2.5s ease-in-out infinite;
+        animation: floatStar 2.5s ease-in-out infinite, twinklePulse 1.8s ease-in-out infinite;
         animation-delay: calc(var(--i) * 0.4s);
         background: linear-gradient(120deg, #ff8a00, #e52e71, #4facfe, #43e97b);
         background-clip: text;
         -webkit-background-clip: text;
         color: transparent;
         -webkit-text-fill-color: transparent;
-        filter: drop-shadow(0 0 8px #fff6);
+        /* Subtle white drop shadow behind each star for separation */
+        text-shadow: 0 2px 6px rgba(255,255,255,0.85);
+        filter: drop-shadow(0 2px 6px rgba(255,255,255,0.75));
       }
 
       @keyframes floatStar {
@@ -556,6 +625,14 @@
         40% { transform: translateY(-18px) scale(1.15) rotate(12deg);}
         60% { transform: translateY(10px) scale(0.95) rotate(-8deg);}
       }
+
+      /* Subtle twinkle via font-size pulse (avoids transform conflicts) */
+      @keyframes twinklePulse {
+        0%, 100% { font-size: 2.15rem; }
+        50% { font-size: 2.35rem; }
+      }
+
+      /* Glow intensity pulsing */
 
       .petrdex-title {
         font-size: 3.5rem;
@@ -613,8 +690,18 @@
     </div>
 
     <div id="homepage-content">
-      <!-- Animated rainbow stars and eye-catching title -->
-      <div class="home-header">
+
+      <!-- Navigation buttons moved to top -->
+      <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">Home</a>
+        <a href="dex.html" class="nav-btn">Petrdex</a>
+        <a href="userprofile.html" class="nav-btn">Profile</a>
+        <a href="upload.html" class="nav-btn">Upload</a>
+        <a href="login.html" class="nav-btn" id="loginBtn">Login</a>
+      </div>
+
+      <!-- Thin brown header bar with animated stars inside -->
+      <div class="main-header-bar">
         <div class="rainbow-stars">
           <span class="star" style="--i:0;">✦</span>
           <span class="star" style="--i:1;">★</span>
@@ -622,19 +709,16 @@
           <span class="star" style="--i:3;">★</span>
           <span class="star" style="--i:4;">✦</span>
         </div>
-        <h1 class="petrdex-title">Welcome to Petrdex</h1>
-        <h2 class="petrdex-subtitle">The ultimate archive of Petr stickers at UC Irvine!</h2>
-      </div>
-      <div class="home-description">
-        Petrdex is a community-driven archive dedicated to cataloging every Petr sticker found across UC Irvine. Browse, upload, and share your discoveries with fellow anteaters!
       </div>
 
-      <div class="nav-buttons">
-        <a href="index.html" class="nav-btn">Home</a>
-        <a href="dex.html" class="nav-btn">Petrdex</a>
-        <a href="userprofile.html" class="nav-btn">Profile</a>
-        <a href="upload.html" class="nav-btn">Upload</a>
-        <a href="login.html" class="nav-btn" id="loginBtn">Login</a>
+      <!-- Title and subtitle below header bar -->
+      <div class="home-header">
+        <h1 class="petrdex-title" style="font-family: 'Press Start 2P', monospace;">Welcome to Petrdex</h1>
+        <h2 class="petrdex-subtitle" style="font-family: 'Press Start 2P', monospace; color: #6f86d6;">The ultimate archive of Petr stickers at UC Irvine!</h2>
+      </div>
+      <!-- Description font changed to match rest of page -->
+      <div class="home-description" style="font-family: 'Press Start 2P', monospace; color: #5a4633; font-size: 1em;">
+        Petrdex is a community-driven archive dedicated to cataloging every Petr sticker found across UC Irvine. Browse, upload, and share your discoveries with fellow anteaters!
       </div>
 
       <!-- Removed old h1 and intro paragraph here -->
@@ -655,8 +739,8 @@
         <div id="calendarTable"></div>
       </div>
 
-      <!-- Footer bar -->
-      <div class="footer-bar">
+      <!-- Thin brown footer bar with beige logo and lines/stars -->
+      <div class="main-footer-bar">
         <div class="footer-logo">Petrdex</div>
       </div>
     </div>
