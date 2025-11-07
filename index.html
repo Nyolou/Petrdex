@@ -137,12 +137,12 @@
       /* Page transition effects */
       .fade-out-page {
         opacity: 0 !important;
-        transition: opacity 0.4s ease-out;
+        transition: opacity 0.3s ease-out;
       }
 
       body {
         opacity: 1;
-        transition: opacity 0.4s ease-in;
+        transition: opacity 0.3s ease-in;
       }
 
       #welcome-video {
@@ -234,12 +234,23 @@
             }, 800);
           }, 200);
         }
+
+        // Make sure page is visible when loaded
+        document.body.style.opacity = '1';
       });
 
       // ---------------- Page Transition ----------------
-      document.querySelector('.nav-button').addEventListener('click', function(e) {
-        e.preventDefault(); // Prevent immediate navigation
-        const targetHref = this.getAttribute('href');
+      // Add transition to all navigation links
+      function handleNavigation(e) {
+        const link = e.currentTarget;
+        // Don't handle external links or special cases
+        if (link.getAttribute('href').startsWith('http') || 
+            (link.id === 'loginBtn' && localStorage.getItem('loggedInUser'))) {
+          return;
+        }
+        
+        e.preventDefault();
+        const targetHref = link.getAttribute('href');
         
         // Fade out the current page
         document.body.classList.add('fade-out-page');
@@ -247,7 +258,12 @@
         // Navigate after fade animation
         setTimeout(() => {
           window.location.href = targetHref;
-        }, 400);
+        }, 300);
+      }
+
+      // Apply to all navigation buttons
+      document.querySelectorAll('.nav-btn, .nav-button').forEach(btn => {
+        btn.addEventListener('click', handleNavigation);
       });
 
       // Ensure page fades in when loaded
