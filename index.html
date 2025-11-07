@@ -127,13 +127,32 @@
         transform:translateY(-3px); box-shadow:0 6px 20px rgba(139,69,19,0.4);
         background:#b8945f; border-color:#a0844f;
       }
+
+      #welcome-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* make sure it fills the screen without stretching */
+        z-index: 0;
+      }
+
+      #welcome-screen > * {
+        position: relative;
+        z-index: 1; /* ensures any overlay text/buttons go above video if needed */
+      }
+
     </style>
   </head>
   <body>
     <div id="welcome-screen">
-      <div id="welcome-text">Welcome to Petrdex!</div>
+      <video id="welcome-video" autoplay muted playsinline>
+        <source src="/mainpage-banner1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
     </div>
-    
+
     <div id="homepage-content">
       <div class="nav-buttons">
         <a href="index.html" class="nav-btn">Home</a>
@@ -161,10 +180,12 @@
       // ---------------- Welcome screen fade ----------------
       window.addEventListener('load', function() {
         const welcomeScreen = document.getElementById('welcome-screen');
-        setTimeout(function() {
+        const welcomeVideo = document.getElementById('welcome-video');
+
+        welcomeVideo.addEventListener('ended', function() {
           welcomeScreen.classList.add('fade-out');
-          setTimeout(function() { welcomeScreen.classList.add('hidden'); }, 1000);
-        }, 1500);
+          setTimeout(() => { welcomeScreen.classList.add('hidden'); }, 1000);
+        });
       });
 
       // ---------------- Login/Logout Button ----------------
