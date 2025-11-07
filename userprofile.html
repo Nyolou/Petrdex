@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>User Profile - Petrdex</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+      :root{
+        --bg: #f5e6d3;
+        --card:#fefefe;
+        --accent:#d4a574;
+        --muted:#6b5a4a;
+      }
+      *{box-sizing:border-box}
+      body{
+        margin:0;
+        font-family: 'Press Start 2P', monospace;
+        background: var(--bg);
+        color:var(--muted);
+        -webkit-font-smoothing:antialiased;
+      }
+      .nav-buttons{display:flex;justify-content:center;gap:15px;padding:18px}
+      .nav-btn{padding:8px 16px;border:2px solid var(--accent);border-radius:8px;background:var(--bg);color:var(--muted);text-decoration:none}
+
+      .banner{
+        height:90px;
+        background: linear-gradient(135deg, rgba(212,165,116,0.9), rgba(180,138,90,0.9));
+        display:flex;align-items:flex-end;padding:20px;border-bottom:6px solid rgba(0,0,0,0.03);
+        position:relative;overflow:hidden
+      }
+      .banner::after{content:'';position:absolute;right:-40px;bottom:-40px;width:240px;height:240px;background-image:url('/petrfav.png');background-size:contain;opacity:0.06;transform:rotate(-20deg)}
+
+  /* place profile card below the banner (no overlap) */
+  .profile-card{max-width:1000px;margin: 20px auto 40px;padding:20px;background:var(--card);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.08);display:grid;grid-template-columns:280px 1fr;gap:20px}
+
+      .avatar{
+        width:240px;height:240px;border-radius:10px;background:#fff;border:8px solid #fff;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:6em
+      }
+      .avatar img{width:100%;height:100%;object-fit:cover}
+
+      .profile-meta h1{margin:0;font-size:1.1em;color:var(--muted)}
+      .handle{font-size:0.8em;color:#8b7355;margin-top:8px}
+      .bio{margin-top:14px;font-size:0.7em;line-height:1.6;color:#6b5a4a}
+      .stats{display:flex;gap:12px;margin-top:16px}
+      .stat{background:#f0e6d2;padding:8px;border-radius:8px;border:1px solid var(--accent);font-size:0.7em}
+
+      .collection{max-width:1000px;margin:0 auto;padding:0 20px 60px}
+      .collection h2{font-size:0.9em;color:var(--muted);margin:20px 0}
+      .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:18px}
+      .card{background:#fff;padding:10px;border-radius:8px;border:1px solid rgba(139,69,19,0.08);box-shadow:0 6px 12px rgba(139,69,19,0.06);cursor:pointer}
+      .card .image{height:140px;background:linear-gradient(135deg,#a8c0ff,#c5a3ff);display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:6px}
+      .card img{width:100%;height:100%;object-fit:cover}
+      .card .name{margin-top:8px;font-size:0.8em;color:var(--muted)}
+
+      @media (max-width:720px){
+        .profile-card{grid-template-columns:1fr}
+        .avatar{width:160px;height:160px;margin:0 auto}
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nav-buttons">
+      <a class="nav-btn" href="index.html">Home</a>
+      <a class="nav-btn" href="dex.html">Petrdex</a>
+      <a class="nav-btn" href="profile.html">Petr Profile</a>
+      <a class="nav-btn" href="upload.html">Upload</a>
+    </div>
+
+    <div class="banner">
+      <div style="margin-left:12px;color:#fff;font-size:1.2em;z-index:1">User Profile</div>
+    </div>
+
+    <div class="profile-card">
+      <div>
+        <div class="avatar" id="avatar">
+          <img src="petr_images/1.png" alt="User avatar" onerror="this.style.display='none'; this.parentElement.innerHTML='👤'">
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px">
+          <a class="nav-btn" id="followBtn" href="#">Follow</a>
+          <a class="nav-btn" href="dex.html">View All</a>
+        </div>
+      </div>
+
+      <div class="profile-meta">
+        <h1 id="displayName">Zoey</h1>
+        <div class="handle" id="handle">@zoey_uc</div>
+        <div class="bio" id="bio">Collector of rare Petrs, coffee enthusiast, and UCI student. Loves swapping stickers and finding new drops around campus.</div>
+        <div class="stats">
+          <div class="stat"><strong id="colCount">5</strong> Collection</div>
+          <div class="stat"><strong id="joined">2022</strong> Joined</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="collection">
+      <h2>Collection</h2>
+      <div class="grid" id="collectionGrid">
+        <!-- collection cards injected by JS -->
+      </div>
+    </div>
+
+    <script>
+      // Sample user data and collection IDs (use existing petr_images)
+      const user = {
+        name: 'Zoey',
+        handle: '@zoey_uc',
+        bio: 'Collector of rare Petrs, coffee enthusiast, and UCI student. Loves swapping stickers and finding new drops around campus.',
+        joined: '2022',
+        collection: [1,2,5,8,10]
+      };
+
+      // Populate meta
+      document.getElementById('displayName').textContent = user.name;
+      document.getElementById('handle').textContent = user.handle;
+      document.getElementById('bio').textContent = user.bio;
+      document.getElementById('colCount').textContent = user.collection.length;
+      document.getElementById('joined').textContent = user.joined;
+
+      // Render collection
+      const grid = document.getElementById('collectionGrid');
+      user.collection.forEach(id => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        const imagePath = `petr_images/${id}.png`;
+        card.innerHTML = `
+          <div class="image"><img src="${imagePath}" alt="Petr ${id}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:48px;opacity:0.3;\'>🐾</div>'"></div>
+          <div class="name">Petr #${String(id).padStart(3,'0')}</div>
+        `;
+        card.addEventListener('click', ()=> window.location.href = `profile.html?id=${id}`);
+        grid.appendChild(card);
+      });
+
+      // Follow button toggle
+      const followBtn = document.getElementById('followBtn');
+      let following = false;
+      followBtn.addEventListener('click', e => { e.preventDefault(); following = !following; followBtn.textContent = following ? 'Following' : 'Follow'; followBtn.style.background = following ? '#b8945f' : ''; });
+    </script>
+  </body>
+</html>
