@@ -4,12 +4,42 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>React + TypeScript + Replit</title>
+    <title>Petrdex</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
       body {
-        background-color: #e0f7fa;
+        background: #f5e6d3;
+        background-image: 
+          radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.05) 0%, transparent 50%),
+          radial-gradient(circle at 80% 70%, rgba(160, 82, 45, 0.05) 0%, transparent 50%),
+          repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(139, 69, 19, 0.03) 1px, rgba(139, 69, 19, 0.03) 2px),
+          repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(160, 82, 45, 0.02) 1px, rgba(160, 82, 45, 0.02) 2px),
+          linear-gradient(135deg, rgba(245, 230, 211, 0.8) 0%, rgba(250, 240, 220, 0.8) 100%);
+        min-height: 100vh;
         margin: 0;
         padding: 0;
+        position: relative;
+        font-family: 'Press Start 2P', monospace;
+      }
+
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+          url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10h80v80h-80z' fill='none' stroke='%23d4a574' stroke-width='0.5' opacity='0.1'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      body > * {
+        position: relative;
+        z-index: 1;
       }
 
       #welcome-screen {
@@ -18,7 +48,12 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #e0f7fa;
+        background: #f5e6d3;
+        background-image: 
+          radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.05) 0%, transparent 50%),
+          radial-gradient(circle at 80% 70%, rgba(160, 82, 45, 0.05) 0%, transparent 50%),
+          repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(139, 69, 19, 0.03) 1px, rgba(139, 69, 19, 0.03) 2px),
+          repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(160, 82, 45, 0.02) 1px, rgba(160, 82, 45, 0.02) 2px);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -38,52 +73,89 @@
       #welcome-text {
         font-size: 3em;
         font-weight: bold;
-        color: #333;
-        font-family: sans-serif;
+        color: #5a4a3a;
+        font-family: 'Press Start 2P', monospace;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .nav-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        padding-top: 20px;
+      }
+
+      .nav-btn {
+        padding: 10px 20px;
+        border: 2px solid #d4a574;
+        border-radius: 8px;
+        background: #f5e6d3;
+        color: #6b5a4a;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.7em;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+        display: inline-block;
+      }
+
+      .nav-btn:hover {
+        background: #e8d5c0;
+        color: #5a4a3a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
       }
 
       #homepage-content {
         max-width: 900px;
         margin: 0 auto;
         padding: 40px 20px;
-        font-family: sans-serif;
-        color: #333;
+        font-family: 'Press Start 2P', monospace;
+        color: #5a4a3a;
+        position: relative;
+        z-index: 1;
       }
 
       #homepage-content h1 {
         text-align: center;
-        font-size: 2.5em;
+        font-size: 1.8em;
         font-weight: bold;
         margin-bottom: 30px;
-        color: #1a1a1a;
+        color: #5a4a3a;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        line-height: 1.5;
       }
 
       #homepage-content p {
-        font-size: 1.1em;
-        line-height: 1.7;
+        font-size: 0.7em;
+        line-height: 1.8;
         margin-bottom: 20px;
-        color: #444;
+        color: #6b5a4a;
       }
 
       #homepage-content ul {
         list-style-type: disc;
         margin-left: 30px;
         margin-bottom: 20px;
-        line-height: 1.8;
+        line-height: 2;
       }
 
       #homepage-content li {
-        margin-bottom: 10px;
-        font-size: 1.1em;
-        color: #444;
+        margin-bottom: 15px;
+        font-size: 0.7em;
+        color: #6b5a4a;
       }
 
       #homepage-content .tagline {
         text-align: center;
-        font-size: 1.4em;
+        font-size: 0.9em;
         font-weight: 600;
         margin-top: 40px;
-        color: #1a1a1a;
+        color: #5a4a3a;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
       }
 
       #homepage-content .nav-button {
@@ -91,21 +163,24 @@
         width: fit-content;
         margin: 40px auto 0;
         padding: 15px 40px;
-        background: linear-gradient(135deg, #dc2626, #ef4444);
-        color: white;
+        background: #d4a574;
+        color: #fff;
         text-decoration: none;
-        border-radius: 25px;
-        font-size: 1.2em;
+        border-radius: 8px;
+        font-size: 0.8em;
         font-weight: bold;
         text-align: center;
-        box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        border: 2px solid #b8945f;
+        box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
         transition: all 0.3s ease;
+        font-family: 'Press Start 2P', monospace;
       }
 
       #homepage-content .nav-button:hover {
         transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(220, 38, 38, 0.5);
-        background: linear-gradient(135deg, #ef4444, #f87171);
+        box-shadow: 0 6px 20px rgba(139, 69, 19, 0.4);
+        background: #b8945f;
+        border-color: #a0844f;
       }
     </style>
   </head>
@@ -115,6 +190,13 @@
     </div>
     
     <div id="homepage-content">
+      <div class="nav-buttons">
+        <a href="index.html" class="nav-btn">Home</a>
+        <a href="dex.html" class="nav-btn">Petrdex</a>
+        <a href="profile.html" class="nav-btn">Profile</a>
+        <a href="page.jsx" class="nav-btn">Upload</a>
+        <a href="#" class="nav-btn" id="loginBtn">Login</a>
+      </div>
       <h1>Welcome to Petrdex — the ultimate archive of Petr stickers at UC Irvine!</h1>
       
       <p>
@@ -160,6 +242,18 @@
           }, 1000); // Match the transition duration
         }, 1500);
       });
+
+      // Login/Logout toggle
+      let isLoggedIn = false;
+      const loginBtn = document.getElementById('loginBtn');
+      
+      if (loginBtn) {
+        loginBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          isLoggedIn = !isLoggedIn;
+          loginBtn.textContent = isLoggedIn ? 'Logout' : 'Login';
+        });
+      }
     </script>
   </body>
 </html>
