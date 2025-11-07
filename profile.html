@@ -495,7 +495,20 @@
         };
 
         // Load petr data
-        const petr = petrs[petrNumber] || petrs['1'];
+        // Try loading from uploadedPetrs first
+        const uploadedPetrs = JSON.parse(localStorage.getItem('uploadedPetrs') || '[]');
+        let petr = null;
+
+        // uploadedPetrs are stored in an array, so check if this ID matches
+        if (uploadedPetrs.length > 0) {
+        petr = uploadedPetrs.find(p => p.id == petrNumber);
+        }
+
+        // fallback to hardcoded ones if not uploaded
+        if (!petr) {
+        petr = petrs[petrNumber] || petrs['1'];
+        }
+
         
         // Format date
         const date = new Date(petr.dateDropped);
@@ -513,9 +526,11 @@
         tagsContainer.innerHTML = petr.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
 
         // Update image
-        const imagePath = `petr_images/${petr.number}.png`;
         const imageContainer = document.getElementById('petrImage');
-        imageContainer.innerHTML = `<img src="${imagePath}" alt="${petr.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div>🐾</div>';">`;
+        let imageUrl = petr.imageUrl || `petr_images/${petr.number}.png`;
+
+        imageContainer.innerHTML = `<img src="${imageUrl}" alt="${petr.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div>🐾</div>';">`;
+
 
         // Login/Logout toggle
         let isLoggedIn = false;

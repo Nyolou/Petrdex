@@ -623,6 +623,22 @@
 
           const data = await response.json();
           console.log(data);
+
+          // ✅ Save uploaded Petr data locally
+          const uploadedPetrs = JSON.parse(localStorage.getItem('uploadedPetrs')) || [];
+
+          const newPetr = {
+            name: file.name.replace(/\.[^/.]+$/, ""), // strip .png or .jpg
+            creator: creatorName,
+            dateDropped: dropDate,
+            tags: tags,
+            lore: loreDescription,
+            imageUrl: data.secure_url
+          };
+
+          uploadedPetrs.push(newPetr);
+          localStorage.setItem('uploadedPetrs', JSON.stringify(uploadedPetrs));
+
           
           // Replace form content with success message
           const formContainer = document.querySelector('.upload-container');
