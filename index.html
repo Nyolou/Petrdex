@@ -5,9 +5,161 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>React + TypeScript + Replit</title>
+    <style>
+      body {
+        background-color: #e0f7fa;
+        margin: 0;
+        padding: 0;
+      }
+
+      #welcome-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #e0f7fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        opacity: 1;
+        transition: opacity 1s ease-out;
+      }
+
+      #welcome-screen.fade-out {
+        opacity: 0;
+      }
+
+      #welcome-screen.hidden {
+        display: none;
+      }
+
+      #welcome-text {
+        font-size: 3em;
+        font-weight: bold;
+        color: #333;
+        font-family: sans-serif;
+      }
+
+      #homepage-content {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        font-family: sans-serif;
+        color: #333;
+      }
+
+      #homepage-content h1 {
+        text-align: center;
+        font-size: 2.5em;
+        font-weight: bold;
+        margin-bottom: 30px;
+        color: #1a1a1a;
+      }
+
+      #homepage-content p {
+        font-size: 1.1em;
+        line-height: 1.7;
+        margin-bottom: 20px;
+        color: #444;
+      }
+
+      #homepage-content ul {
+        list-style-type: disc;
+        margin-left: 30px;
+        margin-bottom: 20px;
+        line-height: 1.8;
+      }
+
+      #homepage-content li {
+        margin-bottom: 10px;
+        font-size: 1.1em;
+        color: #444;
+      }
+
+      #homepage-content .tagline {
+        text-align: center;
+        font-size: 1.4em;
+        font-weight: 600;
+        margin-top: 40px;
+        color: #1a1a1a;
+      }
+
+      #homepage-content .nav-button {
+        display: block;
+        width: fit-content;
+        margin: 40px auto 0;
+        padding: 15px 40px;
+        background: linear-gradient(135deg, #dc2626, #ef4444);
+        color: white;
+        text-decoration: none;
+        border-radius: 25px;
+        font-size: 1.2em;
+        font-weight: bold;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        transition: all 0.3s ease;
+      }
+
+      #homepage-content .nav-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(220, 38, 38, 0.5);
+        background: linear-gradient(135deg, #ef4444, #f87171);
+      }
+    </style>
   </head>
   <body>
+    <div id="welcome-screen">
+      <div id="welcome-text">Welcome to Petrdex!</div>
+    </div>
+    
+    <div id="homepage-content">
+      <h1>Welcome to Petrdex — the ultimate archive of Petr stickers at UC Irvine!</h1>
+      
+      <p>
+        Petrdex is a community-driven digital Pokédex-style catalog dedicated to the legendary world of Petrs — the students who create and distribute the beloved Petr stickers you see across campus. Each Petr and sticker has its own entry, complete with sightings, variations, lore, and creator info (when known 👀).
+      </p>
+
+      <p>
+        Whether you're a collector, a trader, or simply a fan of the culture, Petrdex helps you:
+      </p>
+
+      <ul>
+        <li>Discover rare, seasonal, and iconic Petr stickers</li>
+        <li>Track your personal sticker collection</li>
+        <li>Learn about the artists and the stories behind each Petr</li>
+        <li>Celebrate the creativity that makes UCI's community so uniquely chaotic and wholesome</li>
+      </ul>
+
+      <p>
+        Petrdex isn't just a database — it's a living record of campus culture.
+      </p>
+
+      <p class="tagline">
+        Catch them. Collect them. Cherish them.
+      </p>
+
+      <a href="dex.html" class="nav-button">Explore the Petrdex Gallery →</a>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/index.jsx"></script>
+    <script>
+      // Wait for page to load, then fade out welcome screen
+      window.addEventListener('load', function() {
+        const welcomeScreen = document.getElementById('welcome-screen');
+        
+        // Show welcome screen for 1.5 seconds, then fade out
+        setTimeout(function() {
+          welcomeScreen.classList.add('fade-out');
+          
+          // Remove welcome screen after fade completes
+          setTimeout(function() {
+            welcomeScreen.classList.add('hidden');
+          }, 1000); // Match the transition duration
+        }, 1500);
+      });
+    </script>
   </body>
 </html>
