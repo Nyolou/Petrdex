@@ -22,41 +22,18 @@
         color:var(--muted);
         -webkit-font-smoothing:antialiased;
       }
-      .nav-buttons{
-        display:flex;
-        justify-content:center;
-        gap:15px;
-        margin: 10px 0;
-        flex-wrap: wrap;
-        width: 100%;
-        padding: 10px;
-      }
-      .nav-btn{
-        padding: 10px 20px;
-        border: 2px solid var(--accent);
-        border-radius: 8px;
-        background: var(--bg);
-        color: var(--muted);
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.7em;
-        font-weight: bold;
-        cursor: pointer;
-        text-decoration: none;
-        transition: all 0.2s;
-        display: inline-block;
-      }
-      .nav-btn:hover{
-        background: #e8d5c0;
-        color: #5a4a3a;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(139,69,19,0.3);
-      }
+  /* keep nav above the banner visually */
+  .nav-buttons{display:flex;justify-content:center;gap:15px;padding:18px;position:relative;z-index:3}
+      .nav-btn{padding:8px 16px;border:2px solid var(--accent);border-radius:8px;background:var(--bg);color:var(--muted);text-decoration:none}
 
       .banner{
         height:90px;
         background: linear-gradient(135deg, rgba(212,165,116,0.9), rgba(180,138,90,0.9));
         display:flex;align-items:flex-end;padding:20px;border-bottom:6px solid rgba(0,0,0,0.03);
-        position:relative;overflow:hidden
+        position:relative;overflow:hidden;
+        /* pull banner up so it sits behind the navigation buttons */
+        margin-top: -58px;
+        z-index:1;
       }
       .banner::after{content:'';position:absolute;right:-40px;bottom:-40px;width:240px;height:240px;background-image:url('/petrfav.png');background-size:contain;opacity:0.06;transform:rotate(-20deg)}
 
@@ -68,9 +45,7 @@
       }
       .avatar img{width:100%;height:100%;object-fit:cover}
 
-  .profile-meta h1{margin:0;font-size:1.1em;color:var(--muted)}
-  .displayname-row{display:flex;align-items:center;gap:12px}
-  .collector-badge{font-size:0.6em;padding:6px 10px;border-radius:12px;color:#ffffff;background:linear-gradient(45deg,#4facfe,#6f86d6);box-shadow:0 2px 6px rgba(0,0,0,0.12);white-space:nowrap;display:none}
+      .profile-meta h1{margin:0;font-size:1.1em;color:var(--muted)}
       .handle{font-size:0.8em;color:#8b7355;margin-top:8px}
       .bio{margin-top:14px;font-size:0.7em;line-height:1.6;color:#6b5a4a}
       .stats{display:flex;gap:12px;margin-top:16px}
@@ -78,11 +53,10 @@
 
   .collection{max-width:1000px;margin:0 auto;padding:0 20px 60px}
   .collection h2{font-size:0.9em;color:var(--muted);margin:20px 0}
-  /* larger cards so Petr images are more prominent; reduce min width to fit more on medium screens */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px}
-  .card{position:relative;background:#fff;padding:12px;border-radius:10px;border:1px solid rgba(139,69,19,0.08);box-shadow:0 6px 12px rgba(139,69,19,0.06);cursor:pointer}
-  .card .image{height:240px;background:linear-gradient(135deg,#a8c0ff,#c5a3ff);display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:8px}
-  .petr-number{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.6);color:#fff;padding:4px 8px;border-radius:6px;font-size:0.75em;font-weight:bold;z-index:2}
+  /* increase card sizes so Petrs are larger in the collection */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+  .card{background:#fff;padding:10px;border-radius:8px;border:1px solid rgba(139,69,19,0.08);box-shadow:0 6px 12px rgba(139,69,19,0.06);cursor:pointer}
+  .card .image{height:220px;background:linear-gradient(135deg,#a8c0ff,#c5a3ff);display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:6px}
       .card img{width:100%;height:100%;object-fit:cover}
       .card .name{margin-top:8px;font-size:0.8em;color:var(--muted)}
 
@@ -117,10 +91,7 @@
       </div>
 
       <div class="profile-meta">
-        <div class="displayname-row">
-          <h1 id="displayName">Zoey</h1>
-          <span id="collectorBadge" class="collector-badge">Petr Collector</span>
-        </div>
+        <h1 id="displayName">Zoey</h1>
         <div class="handle" id="handle">@zoey_uc</div>
         <div class="bio" id="bio">Collector of rare Petrs, coffee enthusiast, and UCI student. Loves swapping stickers and finding new drops around campus.</div>
         <div class="stats">
@@ -140,10 +111,10 @@
     <script>
       // Sample user data and collection IDs (use existing petr_images)
       const user = {
-        name: 'SampleName',
-        handle: '@sample_user',
+        name: 'Zoey',
+        handle: '@zoey_uc',
         bio: 'Collector of rare Petrs, coffee enthusiast, and UCI student. Loves swapping stickers and finding new drops around campus.',
-        joined: '2025',
+        joined: '2022',
         collection: [1,2,5,8,10]
       };
 
@@ -154,43 +125,15 @@
       document.getElementById('colCount').textContent = user.collection.length;
       document.getElementById('joined').textContent = user.joined;
 
-      // Minimal mapping of petr id -> name so collection cards can show name labels
-      const petrNames = {
-        1: 'Classic Petr',
-        2: 'Smiling Petr',
-        3: 'Sleepy Petr',
-        4: 'Party Petr',
-        5: 'Golden Petr',
-        6: 'Studying Petr',
-        7: 'Coffee Petr',
-        8: 'Rainbow Petr',
-        9: 'Winter Petr',
-        10: 'Shiny Petr',
-        11: 'Graduation Petr',
-        12: 'Athletic Petr',
-        13: 'Music Petr',
-        14: 'Halloween Petr',
-        15: 'Mythical Petr'
-      };
-
-      // Show collector badge for the sample logged-in user
-      const badgeEl = document.getElementById('collectorBadge');
-      if (user.name === 'SampleName' || user.handle === '@sample_user') {
-        badgeEl.style.display = 'inline-block';
-      }
-
       // Render collection
       const grid = document.getElementById('collectionGrid');
       user.collection.forEach(id => {
         const card = document.createElement('div');
         card.className = 'card';
         const imagePath = `petr_images/${id}.png`;
-        const name = petrNames[id] || `Petr #${String(id).padStart(3,'0')}`;
-        const numberLabel = `#${String(id).padStart(3,'0')}`;
         card.innerHTML = `
-          <div class="petr-number">${numberLabel}</div>
           <div class="image"><img src="${imagePath}" alt="Petr ${id}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:48px;opacity:0.3;\'>🐾</div>'"></div>
-          <div class="name">${name}</div>
+          <div class="name">Petr #${String(id).padStart(3,'0')}</div>
         `;
         card.addEventListener('click', ()=> window.location.href = `profile.html?id=${id}`);
         grid.appendChild(card);
