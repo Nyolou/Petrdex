@@ -420,6 +420,23 @@
             { number: 14, name: 'Halloween Petr', creator: 'Unknown', dateDropped: '2023-10-31', rarity: 'epic', tags: ['halloween', 'seasonal'] },
             { number: 15, name: 'Mythical Petr', creator: 'Unknown', dateDropped: '2023-12-15', rarity: 'legendary', tags: ['mythical', 'legend'] }
         ];
+        
+        // 🔹 Load user-uploaded Petrs from localStorage
+        const uploadedPetrs = JSON.parse(localStorage.getItem('uploadedPetrs')) || [];
+
+        // 🔹 Add uploaded Petrs to the main list dynamically
+        uploadedPetrs.forEach((petr, index) => {
+        petrs.push({
+            number: petrs.length + index + 1,
+            name: petr.name || 'Unnamed Petr',
+            creator: petr.creator || 'Anonymous',
+            dateDropped: petr.dateDropped || new Date().toISOString(),
+            rarity: petr.rarity || 'common',
+            tags: petr.tags || ['user-upload'],
+            imageUrl: petr.imageUrl // Cloudinary URL
+        });
+        });
+
 
         let searchTerm = '';
 
