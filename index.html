@@ -147,8 +147,8 @@
   </head>
   <body>
     <div id="welcome-screen">
-      <video id="welcome-video" autoplay muted playsinline>
-        <source src="/public/mainpage-banner1.mp4" type="video/mp4">
+      <video id="welcome-video" autoplay muted playsinline preload="auto" loop>
+        <source src="./mainpage-banner1.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
     </div>
@@ -182,6 +182,17 @@
         const welcomeScreen = document.getElementById('welcome-screen');
         const welcomeVideo = document.getElementById('welcome-video');
 
+        // Error handling for video
+        welcomeVideo.addEventListener('error', function(e) {
+          console.error('Error loading video:', e);
+        });
+
+        // Ensure video plays
+        welcomeVideo.play().catch(function(e) {
+          console.error('Error playing video:', e);
+        });
+
+        // Optional: Hide welcome screen after video ends
         welcomeVideo.addEventListener('ended', function() {
           welcomeScreen.classList.add('fade-out');
           setTimeout(() => { welcomeScreen.classList.add('hidden'); }, 1000);
