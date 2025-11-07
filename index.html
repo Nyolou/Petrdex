@@ -52,7 +52,7 @@
         align-items: center;
         z-index: 9999;
         opacity: 1;
-        transition: all 1.5s ease-out;
+        transition: all 0.8s ease-out;
       }
 
       #welcome-screen.fade-out { 
@@ -214,14 +214,14 @@
 
         function showHomepage() {
           welcomeScreen.classList.add('fade-out');
-          // Show homepage content with a slight delay
+          // Show homepage content with minimal delay
           setTimeout(() => {
             homepageContent.style.opacity = '1';
             // Remove welcome screen from DOM after fade
             setTimeout(() => {
               welcomeScreen.classList.add('hidden');
-            }, 1500);
-          }, 500);
+            }, 800);
+          }, 200);
         }
       });
 
