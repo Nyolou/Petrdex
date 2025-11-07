@@ -51,6 +51,11 @@
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(139,69,19,0.3);
       }
+      .logout-btn{
+        background:#ff6961 !important;
+        border-color:#ff4444 !important;
+        color:white !important;
+      }
 
       .banner{
         height:90px;
@@ -60,35 +65,65 @@
       }
       .banner::after{content:'';position:absolute;right:-40px;bottom:-40px;width:240px;height:240px;background-image:url('/petrfav.png');background-size:contain;opacity:0.06;transform:rotate(-20deg)}
 
-  /* place profile card below the banner (no overlap) */
-  .profile-card{max-width:1000px;margin: 20px auto 40px;padding:20px;background:var(--card);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.08);display:grid;grid-template-columns:280px 1fr;gap:20px}
+      /* place profile card below the banner (no overlap) */
+      .profile-card{max-width:1000px;margin: 20px auto 40px;padding:20px;background:var(--card);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.08);display:grid;grid-template-columns:280px 1fr;gap:20px}
 
       .avatar{
-        width:240px;height:240px;border-radius:10px;background:#fff;border:8px solid #fff;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:6em
+        width:240px;height:240px;border-radius:10px;background:#fff;border:8px solid #fff;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:6em;
       }
       .avatar img{width:100%;height:100%;object-fit:cover}
 
-  .profile-meta h1{margin:0;font-size:1.1em;color:var(--muted)}
-  .displayname-row{display:flex;align-items:center;gap:12px}
-  .collector-badge{font-size:0.6em;padding:6px 10px;border-radius:12px;color:#ffffff;background:linear-gradient(45deg,#4facfe,#6f86d6);box-shadow:0 2px 6px rgba(0,0,0,0.12);white-space:nowrap;display:none}
+      .profile-meta h1{margin:0;font-size:1.1em;color:var(--muted)}
+      .displayname-row{display:flex;align-items:center;gap:12px}
+      .collector-badge{font-size:0.6em;padding:6px 10px;border-radius:12px;color:#ffffff;background:linear-gradient(45deg,#4facfe,#6f86d6);box-shadow:0 2px 6px rgba(0,0,0,0.12);white-space:nowrap;display:none}
       .handle{font-size:0.8em;color:#8b7355;margin-top:8px}
       .bio{margin-top:14px;font-size:0.7em;line-height:1.6;color:#6b5a4a}
       .stats{display:flex;gap:12px;margin-top:16px}
       .stat{background:#f0e6d2;padding:8px;border-radius:8px;border:1px solid var(--accent);font-size:0.7em}
 
-  .collection{max-width:1000px;margin:0 auto;padding:0 20px 60px}
-  .collection h2{font-size:0.9em;color:var(--muted);margin:20px 0}
-  /* larger cards so Petr images are more prominent; reduce min width to fit more on medium screens */
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px}
-  .card{position:relative;background:#fff;padding:12px;border-radius:10px;border:1px solid rgba(139,69,19,0.08);box-shadow:0 6px 12px rgba(139,69,19,0.06);cursor:pointer}
-  .card .image{height:240px;background:linear-gradient(135deg,#a8c0ff,#c5a3ff);display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:8px}
-  .petr-number{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.6);color:#fff;padding:4px 8px;border-radius:6px;font-size:0.75em;font-weight:bold;z-index:2}
+      .collection{max-width:1000px;margin:0 auto;padding:0 20px 60px}
+      .collection h2{font-size:0.9em;color:var(--muted);margin:20px 0}
+      /* larger cards so Petr images are more prominent; reduce min width to fit more on medium screens */
+      .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px}
+      .card{position:relative;background:#fff;padding:12px;border-radius:10px;border:1px solid rgba(139,69,19,0.08);box-shadow:0 6px 12px rgba(139,69,19,0.06);cursor:pointer;transition:transform 0.18s ease, box-shadow 0.18s ease}
+      .card:hover { transform: translateY(-6px); box-shadow: 0 12px 24px rgba(139,69,19,0.12); }
+      .card .image{height:240px;background:linear-gradient(135deg,#a8c0ff,#c5a3ff);display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:8px}
+      .petr-number{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.6);color:#fff;padding:4px 8px;border-radius:6px;font-size:0.75em;font-weight:bold;z-index:2}
       .card img{width:100%;height:100%;object-fit:cover}
       .card .name{margin-top:8px;font-size:0.8em;color:var(--muted)}
+
+      /* tooltip styles (in-DOM but styled in CSS for fallback) */
+      .petr-tooltip {
+        position: fixed;
+        padding: 6px 10px;
+        background: rgba(0,0,0,0.8);
+        color: #fff;
+        font-size: 0.65em;
+        border-radius: 6px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.12s ease, transform 0.12s ease;
+        transform: translateY(-4px);
+        z-index: 99999;
+      }
 
       @media (max-width:720px){
         .profile-card{grid-template-columns:1fr}
         .avatar{width:160px;height:160px;margin:0 auto}
+      }
+
+      /* wiggle and bounce keyframes */
+      @keyframes wiggle {
+        0% { transform: rotate(0deg); }
+        25% { transform: rotate(-3deg); }
+        50% { transform: rotate(3deg); }
+        75% { transform: rotate(-2deg); }
+        100% { transform: rotate(0deg); }
+      }
+      @keyframes bounce {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-6px); }
+        100% { transform: translateY(0); }
       }
     </style>
   </head>
@@ -98,7 +133,7 @@
         <a href="dex.html" class="nav-btn">Petrdex</a>
         <a href="userprofile.html" class="nav-btn">Profile</a>
         <a href="upload.html" class="nav-btn">Upload</a>
-        <a href="login.html" class="nav-btn" id="loginBtn">Login</a>
+        <button class="nav-btn logout-btn" id="logoutBtn">Logout</button>
       </div>
 
     <div class="banner">
@@ -107,9 +142,7 @@
 
     <div class="profile-card">
       <div>
-        <div class="avatar" id="avatar">
-          <img src="petr_images/1.png" alt="User avatar" onerror="this.style.display='none'; this.parentElement.innerHTML='👤'">
-        </div>
+        <div class="avatar" id="avatar"></div>
         <div style="margin-top:12px;display:flex;gap:8px">
           <a class="nav-btn" id="followBtn" href="#">Follow</a>
           <a class="nav-btn" href="dex.html">View All</a>
@@ -118,14 +151,14 @@
 
       <div class="profile-meta">
         <div class="displayname-row">
-          <h1 id="displayName">Zoey</h1>
+          <h1 id="displayName"></h1>
           <span id="collectorBadge" class="collector-badge">Petr Collector</span>
         </div>
-        <div class="handle" id="handle">@zoey_uc</div>
-        <div class="bio" id="bio">Collector of rare Petrs, coffee enthusiast, and UCI student. Loves swapping stickers and finding new drops around campus.</div>
+        <div class="handle" id="handle"></div>
+        <div class="bio" id="bio"></div>
         <div class="stats">
-          <div class="stat"><strong id="colCount">5</strong> Collection</div>
-          <div class="stat"><strong id="joined">2022</strong> Joined</div>
+          <div class="stat"><strong id="colCount"></strong> Collection</div>
+          <div class="stat"><strong id="joined"></strong> Joined</div>
         </div>
       </div>
     </div>
@@ -137,69 +170,215 @@
       </div>
     </div>
 
+    <!-- tooltip element -->
+    <div id="petrTooltip" class="petr-tooltip" aria-hidden="true"></div>
+
     <script>
-      // Sample user data and collection IDs (use existing petr_images)
-      const user = {
-        name: 'SampleName',
-        handle: '@sample_user',
-        bio: 'Collector of rare Petrs, coffee enthusiast, and UCI student. Loves swapping stickers and finding new drops around campus.',
-        joined: '2025',
-        collection: [1,2,5,8,10]
-      };
-
-      // Populate meta
-      document.getElementById('displayName').textContent = user.name;
-      document.getElementById('handle').textContent = user.handle;
-      document.getElementById('bio').textContent = user.bio;
-      document.getElementById('colCount').textContent = user.collection.length;
-      document.getElementById('joined').textContent = user.joined;
-
+      // ----- configuration & fallback data -----
       // Minimal mapping of petr id -> name so collection cards can show name labels
       const petrNames = {
-        1: 'Classic Petr',
-        2: 'Smiling Petr',
-        3: 'Sleepy Petr',
-        4: 'Party Petr',
-        5: 'Golden Petr',
-        6: 'Studying Petr',
-        7: 'Coffee Petr',
-        8: 'Rainbow Petr',
-        9: 'Winter Petr',
-        10: 'Shiny Petr',
-        11: 'Graduation Petr',
-        12: 'Athletic Petr',
-        13: 'Music Petr',
-        14: 'Halloween Petr',
-        15: 'Mythical Petr'
+        1: 'Classic Petr', 2: 'Smiling Petr', 3: 'Sleepy Petr', 4: 'Party Petr', 5: 'Golden Petr',
+        6: 'Studying Petr', 7: 'Coffee Petr', 8: 'Rainbow Petr', 9: 'Winter Petr', 10: 'Shiny Petr',
+        11: 'Graduation Petr', 12: 'Athletic Petr', 13: 'Music Petr', 14: 'Halloween Petr', 15: 'Mythical Petr'
       };
 
-      // Show collector badge for the sample logged-in user
-      const badgeEl = document.getElementById('collectorBadge');
-      if (user.name === 'SampleName' || user.handle === '@sample_user') {
-        badgeEl.style.display = 'inline-block';
-      }
+      // Handy util to format # label
+      function petrLabel(id){ return `#${String(id).padStart(3,'0')}`; }
 
-      // Render collection
-      const grid = document.getElementById('collectionGrid');
-      user.collection.forEach(id => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        const imagePath = `petr_images/${id}.png`;
-        const name = petrNames[id] || `Petr #${String(id).padStart(3,'0')}`;
-        const numberLabel = `#${String(id).padStart(3,'0')}`;
-        card.innerHTML = `
-          <div class="petr-number">${numberLabel}</div>
-          <div class="image"><img src="${imagePath}" alt="Petr ${id}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:48px;opacity:0.3;\'>🐾</div>'"></div>
-          <div class="name">${name}</div>
-        `;
-        card.addEventListener('click', ()=> window.location.href = `profile.html?id=${id}`);
-        grid.appendChild(card);
+      // ----- logout handling -----
+      document.getElementById('logoutBtn').addEventListener('click', () => {
+        localStorage.removeItem('token');         // JWT token if you're using backend auth
+        localStorage.removeItem('loggedInUser');  // older localStorage fallback
+        // redirect to login
+        window.location.href = 'login.html';
       });
 
-      // Follow button toggle
-      const followBtn = document.getElementById('followBtn');
-      let following = false;
-      followBtn.addEventListener('click', e => { e.preventDefault(); following = !following; followBtn.textContent = following ? 'Following' : 'Follow'; followBtn.style.background = following ? '#b8945f' : ''; });
+      // ----- try to load profile from API (JWT) or fallback to localStorage user -----
+      async function loadProfile() {
+        // Prefer JWT token if present
+        const token = localStorage.getItem('token');
+        let user = null;
+
+        if (token) {
+          try {
+            const res = await fetch('/api/auth/profile', {
+              headers: { 'Authorization': 'Bearer ' + token }
+            });
+            if (res.ok) {
+              user = await res.json();
+            } else {
+              // token invalid or expired -> clear and fall back
+              console.warn('Token fetch returned', res.status);
+              localStorage.removeItem('token');
+            }
+          } catch (err) {
+            console.warn('Profile fetch failed (network). Falling back to localStorage.', err);
+          }
+        }
+
+        // fallback: check localStorage users + loggedInUser
+        if (!user) {
+          const logged = localStorage.getItem('loggedInUser');
+          const users = JSON.parse(localStorage.getItem('users') || '[]');
+          if (logged) {
+            user = users.find(u => u.username === logged) || null;
+            // normalize fields for compatibility with API shape
+            if (user) {
+              user.username = user.username || user.name || logged;
+              user.bio = user.bio || '';
+              user.collection = user.collection || user.collectionIds || [];
+              user.createdAt = user.createdAt || new Date().toISOString();
+              user.avatar = user.profilePic || user.avatar || '';
+            }
+          }
+        }
+
+        if (!user) {
+          // nothing found — send to login
+          alert('Please log in to view your profile.');
+          window.location.href = 'login.html';
+          return;
+        }
+
+        renderProfile(user);
+      }
+
+      // ----- render profile & collection -----
+      function renderProfile(user) {
+        document.getElementById('displayName').textContent = user.username;
+        document.getElementById('handle').textContent = '@' + user.username;
+        document.getElementById('bio').textContent = user.bio || 'This user has no bio yet.';
+        document.getElementById('joined').textContent = new Date(user.createdAt || Date.now()).getFullYear();
+
+        const avatarEl = document.getElementById('avatar');
+        if (user.avatar) {
+          avatarEl.innerHTML = `<img src="${user.avatar}" alt="avatar" onerror="this.style.display='none'; this.parentElement.textContent='👤'">`;
+        } else {
+          avatarEl.textContent = '👤';
+        }
+
+        // Show collector badge if the user has more than X collection items OR some flag
+        const badgeEl = document.getElementById('collectorBadge');
+        if ((user.collection && user.collection.length >= 3) || user.isCollector) {
+          badgeEl.style.display = 'inline-block';
+        } else {
+          badgeEl.style.display = 'none';
+        }
+
+        // Build collection grid
+        const grid = document.getElementById('collectionGrid');
+        grid.innerHTML = ''; // clear
+        const ids = (user.collection && user.collection.length) ? user.collection : [1,2,5,8,10]; // fallback mock ids
+
+        ids.forEach(id => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          const imagePath = `petr_images/${id}.png`;
+          const name = petrNames[id] || `Petr ${id}`;
+          const numberLabel = petrLabel(id);
+
+          card.innerHTML = `
+            <div class="petr-number">${numberLabel}</div>
+            <div class="image"><img src="${imagePath}" alt="Petr ${id}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'font-size:48px;opacity:0.3;\\'>🐾</div>'"></div>
+            <div class="name">${name}</div>
+          `;
+
+          // clicking opens a (client) profile page for the petr
+          card.addEventListener('click', (e) => {
+              confettiBurst(e.clientX, e.clientY);
+              // Redirect to the Petr detail page with the correct ID
+              window.location.href = `profile.html?id=${id}`;
+          });
+
+
+          // tooltip + wiggle on hover handled separately later
+          grid.appendChild(card);
+        });
+
+        // after rendering grid, attach hover/tooltip/animations
+        attachCardInteractions();
+      }
+
+      // ----- tooltip, wiggle, bounce, confetti logic -----
+      const tooltipEl = document.getElementById('petrTooltip');
+      function showTooltip(text, x, y) {
+        tooltipEl.textContent = text;
+        tooltipEl.style.left = (x + 12) + 'px';
+        tooltipEl.style.top = (y + 12) + 'px';
+        tooltipEl.style.opacity = '1';
+        tooltipEl.style.transform = 'translateY(0)';
+        tooltipEl.setAttribute('aria-hidden', 'false');
+      }
+      function hideTooltip() {
+        tooltipEl.style.opacity = '0';
+        tooltipEl.setAttribute('aria-hidden', 'true');
+      }
+
+      function attachCardInteractions() {
+        document.querySelectorAll('.card').forEach(card => {
+          const nameEl = card.querySelector('.name');
+          const name = nameEl ? nameEl.textContent : 'Petr';
+
+          // wiggle on enter
+          card.addEventListener('mouseenter', () => {
+            card.style.animation = 'wiggle 0.45s ease';
+            // small bounce
+            card.style.transition = 'transform 0.18s ease, box-shadow 0.18s ease';
+          });
+
+          card.addEventListener('mouseleave', () => {
+            hideTooltip();
+            card.style.animation = '';
+          });
+
+          card.addEventListener('mousemove', (e) => {
+            showTooltip(name, e.clientX, e.clientY);
+          });
+        });
+      }
+
+      function confettiBurst(x, y) {
+        for (let i = 0; i < 18; i++) {
+          const piece = document.createElement('div');
+          piece.style.position = 'fixed';
+          piece.style.left = x + 'px';
+          piece.style.top = y + 'px';
+          piece.style.width = (4 + Math.random()*6) + 'px';
+          piece.style.height = (4 + Math.random()*6) + 'px';
+          piece.style.borderRadius = '50%';
+          piece.style.background = `hsl(${Math.random()*360},80%,60%)`;
+          piece.style.opacity = '0.95';
+          piece.style.zIndex = 99998;
+          piece.style.transform = `translate(0,0) rotate(${Math.random()*360}deg)`;
+          piece.style.transition = `transform ${700 + Math.random()*500}ms cubic-bezier(.15,.8,.25,1), opacity ${700 + Math.random()*500}ms linear`;
+          document.body.appendChild(piece);
+
+          // animate to a random offset
+          const dx = (Math.random()*160 - 80);
+          const dy = -(80 + Math.random()*140);
+          requestAnimationFrame(() => {
+            piece.style.transform = `translate(${dx}px, ${dy}px) rotate(${Math.random()*720 - 360}deg) scale(${0.6 + Math.random()*0.8})`;
+            piece.style.opacity = '0';
+          });
+
+          setTimeout(() => piece.remove(), 1600 + Math.random()*400);
+        }
+      }
+
+      // ----- initialize -----
+      loadProfile();
+
+      // Optional: if you want quick local testing helpers, uncomment below:
+      /*
+      // Quick test user creation (for local dev only)
+      if (!localStorage.getItem('users')) {
+        const sample = [{ username: 'zoey', password: 'test', bio:'Collector of rare Petrs', collection:[1,2,5,8,10], createdAt: new Date().toISOString(), avatar:'' }];
+        localStorage.setItem('users', JSON.stringify(sample));
+      }
+      // login as sample:
+      // localStorage.setItem('loggedInUser','zoey');
+      */
+
     </script>
   </body>
 </html>
