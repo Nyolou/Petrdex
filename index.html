@@ -52,11 +52,17 @@
         align-items: center;
         z-index: 9999;
         opacity: 1;
-        transition: opacity 1s ease-out;
+        transition: all 1.5s ease-out;
       }
 
-      #welcome-screen.fade-out { opacity: 0; }
-      #welcome-screen.hidden { display: none; }
+      #welcome-screen.fade-out { 
+        opacity: 0;
+        pointer-events: none;
+      }
+      
+      #welcome-screen.hidden { 
+        display: none;
+      }
 
       #welcome-text {
         font-size: 3em;
@@ -147,7 +153,7 @@
   </head>
   <body>
     <div id="welcome-screen">
-      <video id="welcome-video" autoplay muted playsinline preload="auto" loop>
+      <video id="welcome-video" autoplay muted playsinline preload="auto">
         <source src="./mainpage-banner1.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
@@ -181,22 +187,42 @@
       window.addEventListener('load', function() {
         const welcomeScreen = document.getElementById('welcome-screen');
         const welcomeVideo = document.getElementById('welcome-video');
+        const homepageContent = document.getElementById('homepage-content');
+
+        // Initially hide homepage content
+        homepageContent.style.opacity = '0';
+        homepageContent.style.transition = 'opacity 1s ease-in';
 
         // Error handling for video
         welcomeVideo.addEventListener('error', function(e) {
           console.error('Error loading video:', e);
+          // If video fails, show homepage immediately
+          showHomepage();
         });
 
         // Ensure video plays
         welcomeVideo.play().catch(function(e) {
           console.error('Error playing video:', e);
+          // If autoplay fails, show homepage
+          showHomepage();
         });
 
-        // Optional: Hide welcome screen after video ends
+        // When video ends, fade out welcome screen and show homepage
         welcomeVideo.addEventListener('ended', function() {
-          welcomeScreen.classList.add('fade-out');
-          setTimeout(() => { welcomeScreen.classList.add('hidden'); }, 1000);
+          showHomepage();
         });
+
+        function showHomepage() {
+          welcomeScreen.classList.add('fade-out');
+          // Show homepage content with a slight delay
+          setTimeout(() => {
+            homepageContent.style.opacity = '1';
+            // Remove welcome screen from DOM after fade
+            setTimeout(() => {
+              welcomeScreen.classList.add('hidden');
+            }, 1500);
+          }, 500);
+        }
       });
 
       // ---------------- Login/Logout Button ----------------
