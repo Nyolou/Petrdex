@@ -168,6 +168,98 @@
         z-index: 2;
       }
 
+            /* Separator for calendar */
+      .separator {
+        text-align: center;
+        margin: 30px 0;
+        font-size: 0.8em;
+        color: #b8945f;
+      }
+      .separator:before,
+      .separator:after {
+        content: '★';
+        margin: 0 5px;
+      }
+
+      /* Calendar container */
+      .calendar {
+        max-width: 800px;
+        margin: 0 auto 60px;
+        border: 4px solid;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(139,69,19,0.3);
+        background: #fff8f0;
+      }
+
+      /* Dynamic quarter border gradients */
+      .calendar.fall { border-image: linear-gradient(to right, #FFD700, #FFA500, #FF4500) 1; }
+      .calendar.winter { border-image: linear-gradient(to right, #00BFFF, #1E90FF, #00008B) 1; }
+      .calendar.spring { border-image: linear-gradient(to right, #32CD32, #7CFC00, #ADFF2F) 1; }
+      .calendar.summer { border-image: linear-gradient(to right, #FF69B4, #FF1493, #C71585) 1; }
+
+      .calendar table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+      }
+      .calendar th, .calendar td {
+        padding: 10px;
+        border: 1px solid #d4a574;
+        font-size: 0.7em;
+      }
+      .calendar th {
+        background: #f5e6d3;
+      }
+      .calendar td.drop {
+        background: #ffe4b5;
+        border-radius: 8px;
+        color: #b84c00;
+        font-weight: bold;
+      }
+      /* Calendar navigation header */
+      .calendar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f5e6d3;
+        padding: 10px 15px;
+        font-size: 0.8em;
+        font-weight: bold;
+        color: #5a4a3a;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+      }
+      .calendar-header button {
+        font-family: 'Press Start 2P', monospace;
+        font-size: 0.7em;
+        padding: 5px 10px;
+        border: 2px solid #d4a574;
+        border-radius: 8px;
+        background: #f5e6d3;
+        color: #6b5a4a;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .calendar-header button:hover {
+        background: #e8d5c0;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 6px rgba(139,69,19,0.3);
+      }
+
+      /* Small sticker icon in calendar drops */
+      .calendar td.drop {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+      }
+
+      .calendar td.drop img {
+        width: 20px;
+        height: 20px;
+        margin-bottom: 3px;
+      }
 
     </style>
   </head>
@@ -202,7 +294,21 @@
       <p>Petrdex isn't just a database — it's a living record of campus culture.</p>
       <p class="tagline">Catch them. Collect them. Cherish them.</p>
       <a href="dex.html" class="nav-button">Explore the Petrdex Gallery →</a>
+
+      <!-- Cute separator -->
+      <div class="separator">★ Calendar of Chaos ★</div>
+
+      <!-- Petr Sticker Drop Calendar with Navigation (moved inside homepage-content) -->
+      <div class="calendar" id="calendar">
+        <div class="calendar-header">
+          <button id="prevMonth" class="nav-btn">&lt; Prev</button>
+          <span id="calendarTitle"></span>
+          <button id="nextMonth" class="nav-btn">Next &gt;</button>
+        </div>
+        <div id="calendarTable"></div>
+      </div>
     </div>
+
 
     <script>
       // ---------------- Welcome screen fade ----------------
@@ -357,6 +463,97 @@
         }
         // else: user is not logged in → follow link to login.html
       });
+// ------------------ Interactive Petr Sticker Calendar ------------------
+      (function() {
+        const calendarDiv = document.getElementById('calendar');
+        const calendarTableDiv = document.getElementById('calendarTable');
+        const calendarTitle = document.getElementById('calendarTitle');
+        const prevBtn = document.getElementById('prevMonth');
+        const nextBtn = document.getElementById('nextMonth');
+
+        let today = new Date();
+        let displayMonth = today.getMonth();
+        let displayYear = today.getFullYear();
+
+        // Mock Petr sticker drops
+        const mockDrops = {
+          '2025-11-3': "Alpha Drop",
+          '2025-11-7': "Beta Drop",
+          '2025-11-15': "Gamma Drop",
+          '2025-11-22': "Delta Drop",
+          '2025-11-28': "Epsilon Drop",
+          '2025-12-5': "Zeta Drop",
+          '2026-1-12': "Eta Drop",
+          '2026-2-18': "Theta Drop"
+        };
+
+        function getQuarter(month) {
+          if (month >= 8 && month <= 10) return 'fall';      // Sep-Nov
+          else if (month === 11 || month <= 1) return 'winter'; // Dec-Feb
+          else if (month >= 2 && month <= 4) return 'spring';  // Mar-May
+          else return 'summer';                                // Jun-Aug
+        }
+
+        function renderCalendar(month, year) {
+          // Update border gradient based on quarter
+          const quarterClass = getQuarter(month);
+          calendarDiv.className = `calendar ${quarterClass}`;
+
+          // Update title
+          const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+          calendarTitle.textContent = `${monthNames[month]} ${year}`;
+
+          // Build table
+          const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+          const daysInMonth = new Date(year, month + 1, 0).getDate();
+          const firstDay = new Date(year, month, 1).getDay();
+
+          let table = '<table><tr>';
+          days.forEach(day => table += `<th>${day}</th>`);
+          table += '</tr><tr>';
+
+          for(let i=0;i<firstDay;i++) table += '<td></td>';
+
+          for(let day=1; day<=daysInMonth; day++){
+            const dateKey = `${year}-${month+1}-${day}`;
+            if(mockDrops[dateKey]) {
+              table += `<td class="drop">
+                          <img src="sticker-icon.png" alt="Petr sticker" onerror="this.style.display='none'">
+                          ${day}<br><span class=\"drop-label\">${mockDrops[dateKey]}</span>
+                        </td>`;
+            } else {
+              table += `<td>${day}</td>`;
+            }
+
+            if((day + firstDay) % 7 === 0) table += '</tr><tr>';
+          }
+
+          // Close any open row and the table
+          table += '</tr></table>';
+          calendarTableDiv.innerHTML = table;
+        }
+
+        prevBtn.addEventListener('click', function() {
+          displayMonth--;
+          if(displayMonth < 0){
+            displayMonth = 11;
+            displayYear--;
+          }
+          renderCalendar(displayMonth, displayYear);
+        });
+
+        nextBtn.addEventListener('click', function() {
+          displayMonth++;
+          if(displayMonth > 11){
+            displayMonth = 0;
+            displayYear++;
+          }
+          renderCalendar(displayMonth, displayYear);
+        });
+
+        renderCalendar(displayMonth, displayYear);
+      })();
+
     </script>
   </body>
 </html>
