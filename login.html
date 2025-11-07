@@ -6,15 +6,212 @@
   <title>Login - Petrdex</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Press Start 2P', monospace; background:#f5e6d3; display:flex; justify-content:center; align-items:center; height:100vh; }
-    .container { background:#fff; padding:30px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.2); width:300px; text-align:center; }
-    input { width:100%; padding:10px; margin:10px 0; font-family:'Press Start 2P', monospace; font-size:0.7em; }
-    button { padding:10px 20px; background:#d4a574; border:none; border-radius:5px; cursor:pointer; font-family:'Press Start 2P', monospace; }
-    button:hover { background:#b8945f; }
-    a { display:block; margin-top:15px; font-size:0.6em; text-decoration:none; color:#5a4a3a; }
+    body { 
+      font-family: 'Press Start 2P', monospace; 
+      background:#f5e6d3; 
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header-bar {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(212,165,116,0.9), rgba(180,138,90,0.9));
+      padding: 20px 0;
+      text-align: center;
+      color: #f5e6d3;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 10px 0;
+      flex-wrap: wrap;
+      width: 100%;
+      padding: 10px;
+    }
+    .nav-btn {
+      padding: 10px 20px;
+      border: 2px solid #d4a574;
+      border-radius: 8px;
+      background: #f5e6d3;
+      color: #6b5a4a;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.7em;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    .nav-btn:hover {
+      background: #e8d5c0;
+      color: #5a4a3a;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(139,69,19,0.3);
+    }
+    .dancing-petrs {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 15px;
+      margin-bottom: 15px;
+      position: relative;
+    }
+    .dancing-petr {
+      width: 60px;
+      height: 60px;
+      animation: dance 2s infinite ease-in-out;
+      position: relative;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .dancing-petr:hover {
+      animation-play-state: paused;
+      transform: scale(1.2) rotate(360deg);
+    }
+    .dancing-petr img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    @keyframes dance {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-10px) rotate(10deg); }
+      75% { transform: translateY(-5px) rotate(-10deg); }
+    }
+    .confetti {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    @keyframes confettiBurst {
+      0% { 
+        transform: translate(0, 0) rotate(0deg) scale(0.3); 
+        opacity: 1; 
+      }
+      100% { 
+        transform: translate(var(--tx), var(--ty)) rotate(var(--rotate)) scale(1); 
+        opacity: 0; 
+      }
+    }
+    .dancing-petr:hover img {
+      animation: spinEnlarge 0.6s ease-in-out;
+    }
+    @keyframes spinEnlarge {
+      0% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.4) rotate(180deg); }
+      100% { transform: scale(1) rotate(360deg); }
+    }
+    .container { 
+      background:#fff; 
+      padding:30px; 
+      border-radius:8px; 
+      box-shadow:0 4px 15px rgba(0,0,0,0.2); 
+      width:300px; 
+      text-align:center; 
+      margin: 0 auto;
+      flex-grow: 0;
+    }
+    input { 
+      width:100%; 
+      padding:10px; 
+      margin:10px 0; 
+      font-family:'Press Start 2P', monospace; 
+      font-size:0.7em; 
+    }
+    button { 
+      padding:10px 20px; 
+      background:#d4a574; 
+      border:none; 
+      border-radius:5px; 
+      cursor:pointer; 
+      font-family:'Press Start 2P', monospace; 
+    }
+    button:hover { 
+      background:#b8945f; 
+    }
+    a { 
+      display:block; 
+      margin-top:15px; 
+      font-size:0.6em; 
+      text-decoration:none; 
+      color:#5a4a3a; 
+    }
+    .footer-bar {
+      width: 100%;
+      padding: 20px 0;
+      background: linear-gradient(135deg, rgba(212,165,116,0.9), rgba(180,138,90,0.9));
+      text-align: center;
+      position: relative;
+      margin-top: auto;
+    }
+    .footer-bar::before,
+    .footer-bar::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 250px;
+      height: 2px;
+      background: linear-gradient(
+        to right,
+        rgba(245, 230, 211, 0) 0%,
+        rgba(245, 230, 211, 0.4) 100%
+      );
+    }
+    .footer-bar::before {
+      right: 60%;
+    }
+    .footer-bar::after {
+      left: 60%;
+    }
+    .footer-logo {
+      font-size: 1.8em;
+      color: #f5e6d3;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      position: relative;
+      display: inline-block;
+    }
+    .footer-logo::before,
+    .footer-logo::after {
+      content: '✧';
+      font-size: 0.7em;
+      color: #f5e6d3;
+      position: relative;
+      top: -5px;
+      margin: 0 15px;
+      animation: twinkleSmall 1.5s infinite ease-in-out alternate;
+    }
+    @keyframes twinkleSmall {
+      0% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+      100% { transform: scale(1.2) rotate(15deg); opacity: 1; }
+    }
   </style>
 </head>
 <body>
+  <div class="nav-buttons">
+    <a href="index.html" class="nav-btn">Home</a>
+    <a href="dex.html" class="nav-btn">Petrdex</a>
+    <a href="userprofile.html" class="nav-btn">Profile</a>
+    <a href="upload.html" class="nav-btn">Upload</a>
+    <a href="login.html" class="nav-btn">Login</a>
+  </div>
+  <div class="header-bar">
+    <h1>Petrdex</h1>
+  </div>
+  <div class="dancing-petrs">
+    <div class="dancing-petr" style="animation-delay: 0s"><img src="petr_images/1.png" alt="Dancing Petr"></div>
+    <div class="dancing-petr" style="animation-delay: 0.2s"><img src="petr_images/2.png" alt="Dancing Petr"></div>
+    <div class="dancing-petr" style="animation-delay: 0.4s"><img src="petr_images/3.png" alt="Dancing Petr"></div>
+    <div class="dancing-petr" style="animation-delay: 0.6s"><img src="petr_images/4.png" alt="Dancing Petr"></div>
+    <div class="dancing-petr" style="animation-delay: 0.8s"><img src="petr_images/5.png" alt="Dancing Petr"></div>
+  </div>
   <div class="container">
     <h2>Login</h2>
     <input type="text" id="username" placeholder="Username">
@@ -37,6 +234,54 @@
       alert('Login successful!');
       window.location.href = 'index.html';
     });
+
+    // Confetti effect for dancing Petrs
+    document.querySelectorAll('.dancing-petr').forEach(petr => {
+      petr.addEventListener('mouseover', function() {
+        // Trigger spin animation on the Petr image
+        const img = petr.querySelector('img');
+        img.style.animation = 'none';
+        img.offsetHeight; // Trigger reflow
+        img.style.animation = 'spinEnlarge 0.6s ease-in-out';
+
+        const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD'];
+        const centerX = petr.offsetWidth / 2;
+        const centerY = petr.offsetHeight / 2;
+
+        // Create burst of confetti
+        for (let i = 0; i < 24; i++) {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = centerX + 'px';
+          confetti.style.top = centerY + 'px';
+          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+          
+          // Calculate random direction for burst
+          const angle = (i / 24) * 360 + (Math.random() * 30 - 15); // Spread confetti in all directions
+          const distance = 30 + Math.random() * 60; // Random distance
+          const radians = angle * (Math.PI / 180);
+          const tx = Math.cos(radians) * distance;
+          const ty = Math.sin(radians) * distance;
+          const rotate = Math.random() * 720 - 360; // Random rotation between -360 and 360 degrees
+          
+          confetti.style.setProperty('--tx', tx + 'px');
+          confetti.style.setProperty('--ty', ty + 'px');
+          confetti.style.setProperty('--rotate', rotate + 'deg');
+          
+          confetti.style.animation = `confettiBurst ${0.8 + Math.random() * 0.4}s ease-out forwards`;
+          
+          petr.appendChild(confetti);
+          
+          // Remove confetti after animation
+          setTimeout(() => {
+            confetti.remove();
+          }, 1500);
+        }
+      });
+    });
   </script>
+  <div class="footer-bar">
+    <div class="footer-logo">Petrdex</div>
+  </div>
 </body>
 </html>
