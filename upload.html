@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Petrdex Upload</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #f5e6d3;
+      font-family: 'Press Start 2P', monospace;
+      margin: 0;
+      padding: 20px;
+      color: #5a4a3a;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      padding: 10px 20px;
+      border: 2px solid #d4a574;
+      border-radius: 8px;
+      background: #f5e6d3;
+      color: #6b5a4a;
+      font-size: 0.7em;
+      font-weight: bold;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: #e8d5c0;
+      color: #5a4a3a;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .upload-form {
+      max-width: 500px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .upload-form input[type="file"] {
+      margin-bottom: 20px;
+    }
+
+    .upload-form button {
+      padding: 10px 20px;
+      font-family: 'Press Start 2P', monospace;
+      border-radius: 8px;
+      border: 2px solid #b8945f;
+      background: #d4a574;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .upload-form button:hover {
+      background: #b8945f;
+      border-color: #a0844f;
+      transform: translateY(-2px);
+    }
+
+    #status {
+      margin-top: 15px;
+      font-size: 0.7em;
+      color: #5a4a3a;
+    }
+
+    #preview {
+      margin-top: 15px;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="nav-buttons">
+    <a href="index.html" class="nav-btn">Home</a>
+    <a href="dex.html" class="nav-btn">Petrdex</a>
+    <a href="profile.html" class="nav-btn">Profile</a>
+    <a href="upload.html" class="nav-btn">Upload</a>
+  </div>
+
+  <h1>Upload Your Petr Sticker</h1>
+
+  <div class="upload-form">
+    <input type="file" id="fileInput" accept="image/*" required><br>
+    <button id="uploadBtn">Upload Sticker</button>
+    <div id="status"></div>
+    <img id="preview" src="" alt="">
+  </div>
+
+  <script>
+    const fileInput = document.getElementById("fileInput");
+    const uploadBtn = document.getElementById("uploadBtn");
+    const statusDiv = document.getElementById("status");
+    const previewImg = document.getElementById("preview");
+
+    const CLOUD_NAME = "YOUR_CLOUD_NAME";      // replace with your Cloudinary cloud name
+    const UPLOAD_PRESET = "YOUR_UPLOAD_PRESET"; // replace with your unsigned preset
+
+    uploadBtn.addEventListener("click", () => {
+      const file = fileInput.files[0];
+      if (!file) {
+        statusDiv.textContent = "Please select a file first!";
+        return;
+      }
+
+      const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`;
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", UPLOAD_PRESET);
+
+      statusDiv.textContent = "Uploading...";
+
+      fetch(url, {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        statusDiv.textContent = "Upload complete!";
+        previewImg.src = data.secure_url;
+        console.log("File URL:", data.secure_url);
+      })
+      .catch(err => {
+        console.error(err);
+        statusDiv.textContent = "Upload failed. Check console for details.";
+      });
+    });
+  </script>
+
+</body>
+</html>
