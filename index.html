@@ -181,9 +181,107 @@
         margin: 0 5px;
       }
 
+      /* Separator styling */
+      .separator {
+        text-align: center;
+        margin: 40px auto;
+        font-size: 1.5em;
+        position: relative;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: bold;
+        padding: 15px 30px;
+        width: fit-content;
+        background: rgba(252, 244, 234, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(139, 69, 19, 0.15);
+        border: 3px solid;
+      }
+
+      /* Dynamic quarter gradients for separator */
+      .separator.fall { 
+        border-image: linear-gradient(45deg, #FFD700, #FFA500, #FF4500) 1;
+        color: #FF4500;
+      }
+      .separator.winter { 
+        border-image: linear-gradient(45deg, #00BFFF, #1E90FF, #00008B) 1;
+        color: #1E90FF;
+      }
+      .separator.spring { 
+        border-image: linear-gradient(45deg, #32CD32, #7CFC00, #ADFF2F) 1;
+        color: #32CD32;
+      }
+      .separator.summer { 
+        border-image: linear-gradient(45deg, #FF69B4, #FF1493, #C71585) 1;
+        color: #FF1493;
+      }
+
+      .separator::before,
+      .separator::after {
+        content: '★';
+        display: inline-block;
+        margin: 0 15px;
+        font-size: 1.2em;
+        animation: spinStar 2s infinite ease-in-out;
+        position: relative;
+        top: -2px;
+      }
+
+      .separator::before {
+        animation-delay: 0s;
+      }
+
+      .separator::after {
+        animation-delay: 1s;
+      }
+
+      @keyframes spinStar {
+        0% { 
+          transform: scale(1) rotate(0deg); 
+          opacity: 0.7;
+        }
+        50% { 
+          transform: scale(1.3) rotate(180deg); 
+          opacity: 1;
+        }
+        100% { 
+          transform: scale(1) rotate(360deg); 
+          opacity: 0.7;
+        }
+      }
+
+      /* Add sparkle effect to title */
+      .separator span {
+        position: relative;
+        display: inline-block;
+        animation: shimmer 3s infinite;
+        background-image: linear-gradient(
+          -45deg,
+          rgba(255,255,255,0) 0%,
+          rgba(255,255,255,0.8) 50%,
+          rgba(255,255,255,0) 100%
+        );
+        background-size: 200% 100%;
+        background-position: 100% 0;
+        background-clip: text;
+        -webkit-background-clip: text;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: 100% 0;
+        }
+        70% {
+          background-position: -100% 0;
+        }
+        100% {
+          background-position: -100% 0;
+        }
+      }
+
       /* Calendar container */
       .calendar {
-        max-width: 800px;
+        max-width: 1100px;
         margin: 0 auto 60px;
         border: 4px solid;
         border-radius: 15px;
@@ -198,15 +296,35 @@
       .calendar.spring { border-image: linear-gradient(to right, #32CD32, #7CFC00, #ADFF2F) 1; }
       .calendar.summer { border-image: linear-gradient(to right, #FF69B4, #FF1493, #C71585) 1; }
 
+      /* Drop cell content styling */
+      .calendar td.drop .drop-date {
+        font-size: 1.1em;
+        font-weight: bold;
+        margin-bottom: 2px;
+      }
+
+      .calendar td.drop .drop-name {
+        font-size: 0.8em;
+        margin-bottom: 4px;
+        color: #b84c00;
+      }
+
+      .calendar td.drop .drop-time {
+        font-size: 0.7em;
+        color: #666;
+        font-style: italic;
+        opacity: 0.8;
+      }
+
       .calendar table {
         width: 100%;
         border-collapse: collapse;
         text-align: center;
       }
       .calendar th, .calendar td {
-        padding: 10px;
+        padding: 18px;
         border: 1px solid #d4a574;
-        font-size: 0.7em;
+        font-size: 1em;
       }
       .calendar th {
         background: #f5e6d3;
@@ -216,6 +334,7 @@
         border-radius: 8px;
         color: #b84c00;
         font-weight: bold;
+        padding: 15px;
       }
       /* Calendar navigation header */
       .calendar-header {
@@ -223,8 +342,8 @@
         justify-content: space-between;
         align-items: center;
         background: #f5e6d3;
-        padding: 10px 15px;
-        font-size: 0.8em;
+        padding: 15px 20px;
+        font-size: 1.2em;
         font-weight: bold;
         color: #5a4a3a;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
@@ -256,9 +375,154 @@
       }
 
       .calendar td.drop img {
-        width: 20px;
-        height: 20px;
-        margin-bottom: 3px;
+        width: 40px;
+        height: 40px;
+        margin-bottom: 8px;
+      }
+      /* Enhanced bounce animation for sticker icons */
+      @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0) rotate(0deg); }
+        40% { transform: translateY(-12px) rotate(-5deg); }
+        60% { transform: translateY(-6px) rotate(5deg); }
+      }
+
+      .calendar td.drop img {
+        animation: bounce 1.2s ease infinite;
+        animation-fill-mode: both;
+        transition: all 0.3s ease;
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+      }
+
+      .calendar td.drop img:hover {
+        transform: translateY(-5px) scale(1.15) rotate(5deg);
+        filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+      }
+
+      /* Confetti bursts behind sticker drops */
+      .calendar td.drop {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+        background: radial-gradient(circle at 50% 50%, 
+          rgba(255, 223, 186, 0.4) 0%, 
+          rgba(255, 180, 100, 0.2) 50%,
+          transparent 70%);
+        border-radius: 8px;
+        transition: all 0.4s ease;
+        overflow: visible;
+      }
+
+      .calendar td.drop:hover {
+        background: radial-gradient(circle at 50% 50%, 
+          rgba(255, 223, 186, 0.7) 0%, 
+          rgba(255, 180, 100, 0.4) 50%,
+          rgba(255, 150, 50, 0.2) 70%);
+        transform: scale(1.02);
+      }
+
+      /* Enhanced confetti animation */
+      @keyframes confettiFloat {
+        0%, 100% { 
+          transform: translate(0, 0) rotate(0deg) scale(1); 
+          opacity: 0.8; 
+        }
+        25% { 
+          transform: translate(5px, -10px) rotate(45deg) scale(1.1); 
+          opacity: 1; 
+        }
+        50% { 
+          transform: translate(-5px, -5px) rotate(-45deg) scale(0.9); 
+          opacity: 0.9; 
+        }
+        75% { 
+          transform: translate(3px, -8px) rotate(20deg) scale(1.05); 
+          opacity: 0.95; 
+        }
+      }
+
+      .calendar td.drop span {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        animation: confettiFloat 3s infinite ease-in-out;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .calendar td.drop:hover span {
+        opacity: 1;
+      }
+
+      .calendar td.drop span {
+        animation: confettiWiggle 2s infinite ease-in-out;
+      }
+
+      /* Footer bar styling */
+      .footer-bar {
+        width: 100%;
+        padding: 20px 0;
+        background: linear-gradient(
+          to right,
+          rgba(245, 230, 211, 0) 0%,
+          rgba(245, 230, 211, 0.95) 20%,
+          rgba(245, 230, 211, 0.95) 80%,
+          rgba(245, 230, 211, 0) 100%
+        );
+        text-align: center;
+        position: relative;
+        margin-top: 60px;
+      }
+
+      .footer-bar::before,
+      .footer-bar::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        width: 250px;
+        height: 2px;
+        background: linear-gradient(
+          to right,
+          rgba(139, 69, 19, 0) 0%,
+          rgba(139, 69, 19, 0.4) 100%
+        );
+      }
+
+      .footer-bar::before {
+        right: 60%;
+      }
+
+      .footer-bar::after {
+        left: 60%;
+      }
+
+      .footer-logo {
+        font-size: 1.8em;
+        color: #5a4a3a;
+        font-family: 'Press Start 2P', monospace;
+        text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.2);
+        position: relative;
+        display: inline-block;
+      }
+
+      .footer-logo::before,
+      .footer-logo::after {
+        content: '✧';
+        font-size: 0.7em;
+        color: #d4a574;
+        position: relative;
+        top: -5px;
+        margin: 0 15px;
+        animation: twinkleSmall 1.5s infinite ease-in-out alternate;
+      }
+
+      @keyframes twinkleSmall {
+        0% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+        100% { transform: scale(1.2) rotate(15deg); opacity: 1; }
       }
 
     </style>
@@ -296,7 +560,7 @@
       <a href="dex.html" class="nav-button">Explore the Petrdex Gallery →</a>
 
       <!-- Cute separator -->
-      <div class="separator">★ Calendar of Chaos ★</div>
+      <div class="separator"><span>Calendar of Chaos</span></div>
 
       <!-- Petr Sticker Drop Calendar with Navigation (moved inside homepage-content) -->
       <div class="calendar" id="calendar">
@@ -306,6 +570,11 @@
           <button id="nextMonth" class="nav-btn">Next &gt;</button>
         </div>
         <div id="calendarTable"></div>
+      </div>
+
+      <!-- Footer bar -->
+      <div class="footer-bar">
+        <div class="footer-logo">Petrdex</div>
       </div>
     </div>
 
@@ -475,16 +744,28 @@
         let displayMonth = today.getMonth();
         let displayYear = today.getFullYear();
 
-        // Mock Petr sticker drops
+        // Mock Petr sticker drops with times
         const mockDrops = {
-          '2025-11-3': "Alpha Drop",
-          '2025-11-7': "Beta Drop",
-          '2025-11-15': "Gamma Drop",
-          '2025-11-22': "Delta Drop",
-          '2025-11-28': "Epsilon Drop",
-          '2025-12-5': "Zeta Drop",
-          '2026-1-12': "Eta Drop",
-          '2026-2-18': "Theta Drop"
+          '2025-11-3': { name: "Alpha Petr", time: "12:00 PM" },
+          '2025-11-7': { name: "Beta Petr", time: "3:30 PM" },
+          '2025-11-12': { name: "Mystery Petr", time: "11:45 AM" },
+          '2025-11-15': { name: "Gamma Petr", time: "2:15 PM" },
+          '2025-11-19': { name: "Surprise Petr", time: "4:20 PM" },
+          '2025-11-22': { name: "Delta Petr", time: "1:00 PM" },
+          '2025-11-25': { name: "Holiday Petr", time: "12:30 PM" },
+          '2025-11-28': { name: "Epsilon Petr", time: "3:00 PM" },
+          '2025-12-2': { name: "Winter Petr", time: "2:45 PM" },
+          '2025-12-5': { name: "Zeta Petr", time: "11:30 AM" },
+          '2025-12-9': { name: "Finals Petr", time: "1:15 PM" },
+          '2025-12-15': { name: "Snowflake Petr", time: "4:00 PM" },
+          '2026-1-8': { name: "New Year Petr", time: "12:00 PM" },
+          '2026-1-12': { name: "Eta Petr", time: "2:30 PM" },
+          '2026-1-16': { name: "Cozy Petr", time: "3:45 PM" },
+          '2026-1-22': { name: "Study Petr", time: "1:30 PM" },
+          '2026-2-5': { name: "Valentine Petr", time: "2:00 PM" },
+          '2026-2-14': { name: "Love Petr", time: "11:00 AM" },
+          '2026-2-18': { name: "Theta Petr", time: "3:15 PM" },
+          '2026-2-25': { name: "Spring Petr", time: "12:45 PM" }
         };
 
         function getQuarter(month) {
@@ -498,6 +779,10 @@
           // Update border gradient based on quarter
           const quarterClass = getQuarter(month);
           calendarDiv.className = `calendar ${quarterClass}`;
+          
+          // Update separator gradient
+          const separator = document.querySelector('.separator');
+          separator.className = `separator ${quarterClass}`;
 
           // Update title
           const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -517,13 +802,53 @@
           for(let day=1; day<=daysInMonth; day++){
             const dateKey = `${year}-${month+1}-${day}`;
             if(mockDrops[dateKey]) {
-              table += `<td class="drop">
-                          <img src="sticker-icon.png" alt="Petr sticker" onerror="this.style.display='none'">
-                          ${day}<br><span class=\"drop-label\">${mockDrops[dateKey]}</span>
+              const delay = Math.random() * 0.5; // random bounce delay
+              const confetti = Array.from({length: 12}).map(() => {
+                const x = Math.random() * 80 + 10; // 10%-90%
+                const y = Math.random() * 80 + 10;
+                const colors = [
+                  '#FFD700', // gold
+                  '#FF4500', // red-orange
+                  '#32CD32', // lime
+                  '#1E90FF', // dodger blue
+                  '#FF69B4', // hot pink
+                  '#9370DB', // medium purple
+                  '#00CED1', // dark turquoise
+                  '#FFA500'  // orange
+                ];
+                const color = colors[Math.floor(Math.random()*colors.length)];
+                const delay = (Math.random() * 2).toFixed(2);
+                const size = Math.random() * 4 + 3; // 3-7px
+                const duration = (Math.random() * 1 + 2).toFixed(2); // 2-3s
+                return `<span style="
+                          position: absolute;
+                          width: ${size}px;
+                          height: ${size}px;
+                          border-radius: 50%;
+                          background: ${color};
+                          box-shadow: 0 0 ${size/2}px ${color}80;
+                          top: ${y}%;
+                          left: ${x}%;
+                          animation: confettiFloat ${duration}s infinite ease-in-out;
+                          animation-delay: ${delay}s;
+                          opacity: 0;
+                          z-index: 1;
+                        "></span>`;
+              }).join('');
+
+              
+              table += `<td class="drop" style="position:relative;">
+                          ${confetti}
+                          <img src="attached_assets/sticker-icon.png" alt="Petr sticker" style="animation-delay:${delay}s;">
+                          <div class="drop-date">${day}</div>
+                          <div class="drop-name">${mockDrops[dateKey].name}</div>
+                          <div class="drop-time">${mockDrops[dateKey].time}</div>
                         </td>`;
             } else {
               table += `<td>${day}</td>`;
             }
+
+
 
             if((day + firstDay) % 7 === 0) table += '</tr><tr>';
           }
