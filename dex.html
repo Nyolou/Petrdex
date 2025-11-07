@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petrdex</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #f5e6d3;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(160, 82, 45, 0.05) 0%, transparent 50%),
+                repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(139, 69, 19, 0.03) 1px, rgba(139, 69, 19, 0.03) 2px),
+                repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(160, 82, 45, 0.02) 1px, rgba(160, 82, 45, 0.02) 2px),
+                linear-gradient(135deg, rgba(245, 230, 211, 0.8) 0%, rgba(250, 240, 220, 0.8) 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            font-family: 'Press Start 2P', monospace;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10h80v80h-80z' fill='none' stroke='%23d4a574' stroke-width='0.5' opacity='0.1'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            color: #5a4a3a;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #6b5a4a;
+            font-size: 1.1em;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #d4a574;
+            border-radius: 25px;
+            font-size: 1em;
+            font-family: 'Press Start 2P', monospace;
+            background: #fefefe;
+            box-shadow: 0 4px 6px rgba(139, 69, 19, 0.15);
+            color: #5a4a3a;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #8b6f47;
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.25);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #d4a574;
+            border-radius: 20px;
+            background: #f5e6d3;
+            color: #6b5a4a;
+            font-family: 'Press Start 2P', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover {
+            background: #e8d5c0;
+            color: #5a4a3a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+        }
+
+        .filter-btn.active {
+            background: #d4a574;
+            color: #fff;
+            border-color: #b8945f;
+        }
+
+        .gallery {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 40px;
+            padding: 20px;
+        }
+
+        .petr-card {
+            background: #fefefe;
+            padding: 15px 15px 20px 15px;
+            box-shadow: 
+                0 4px 6px rgba(139, 69, 19, 0.2),
+                0 10px 20px rgba(139, 69, 19, 0.15),
+                0 20px 40px rgba(139, 69, 19, 0.1),
+                inset 0 0 0 1px rgba(139, 69, 19, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            transform: rotate(var(--rotation, 0deg));
+            border: 1px solid rgba(139, 69, 19, 0.2);
+        }
+
+        .petr-card::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 20px;
+            width: 30px;
+            height: 8px;
+            background: rgba(200, 200, 200, 0.6);
+            border-radius: 2px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: rotate(-2deg);
+        }
+
+        .petr-card:nth-child(3n+1) {
+            --rotation: -1.5deg;
+        }
+
+        .petr-card:nth-child(3n+2) {
+            --rotation: 1deg;
+        }
+
+        .petr-card:nth-child(3n+3) {
+            --rotation: -0.5deg;
+        }
+
+        .petr-card:hover {
+            transform: rotate(0deg) translateY(-10px) scale(1.05);
+            z-index: 10;
+            box-shadow: 
+                0 8px 12px rgba(0, 0, 0, 0.15),
+                0 20px 30px rgba(0, 0, 0, 0.2),
+                0 30px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .petr-number {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.7em;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .petr-image {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #a8c0ff 0%, #c5a3ff 50%, #ffb3e6 100%);
+            margin: 0 0 12px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 8px solid #ffffff;
+            box-shadow: 
+                inset 0 0 0 1px rgba(0, 0, 0, 0.1),
+                0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .petr-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+
+        .petr-image > div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .petr-name {
+            font-size: 1.1em;
+            font-weight: normal;
+            color: #5a4a3a;
+            text-align: left;
+            margin-bottom: 8px;
+            text-transform: none;
+            font-family: 'Press Start 2P', monospace;
+            letter-spacing: 0.5px;
+        }
+
+        .petr-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 0.75em;
+            color: #6b5a4a;
+            font-family: 'Press Start 2P', monospace;
+            padding: 0;
+            margin: 0;
+        }
+
+        .info-item {
+            display: flex;
+            padding: 2px 0;
+            border-bottom: none;
+            margin: 0;
+            padding-left: 0;
+        }
+
+        .info-label {
+            font-weight: normal;
+            color: #8b7355;
+            margin: 0;
+            padding: 0;
+        }
+
+        .info-value {
+            color: #5a4a3a;
+            font-weight: 500;
+            margin: 0;
+            padding: 0;
+            margin-left: 8px;
+        }
+
+        .rarity-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-size: 0.7em;
+            font-weight: normal;
+            text-transform: lowercase;
+            font-family: 'Press Start 2P', monospace;
+        }
+
+        .rarity-common {
+            background: #e5e5e5;
+            color: #555;
+        }
+
+        .rarity-uncommon {
+            background: #d4f4dd;
+            color: #2d5016;
+        }
+
+        .rarity-rare {
+            background: #dbeafe;
+            color: #1e3a8a;
+        }
+
+        .rarity-epic {
+            background: #e9d5ff;
+            color: #5b21b6;
+        }
+
+        .rarity-legendary {
+            background: #fef3c7;
+            color: #78350f;
+        }
+
+        .stats {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: #f0e6d2;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.7em;
+            border: 1px solid #d4a574;
+            font-family: 'Press Start 2P', monospace;
+            color: #6b5a4a;
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: #8b7355;
+        }
+
+        .empty-state h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 15px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌟 Petrdex 🌟</h1>
+        <p>Browse and discover all the Petrs in the collection</p>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" class="search-input" placeholder="Search Petrs by name, number, or tag..." id="searchInput">
+    </div>
+
+    <div class="gallery" id="gallery">
+        <!-- Petrs will be generated by JavaScript -->
+    </div>
+
+    <script>
+        const petrs = [
+            { number: 1, name: 'Classic Petr', creator: 'Unknown', dateDropped: '2023-09-15', rarity: 'common', tags: ['classic', 'campus'] },
+            { number: 2, name: 'Smiling Petr', creator: 'Student A', dateDropped: '2023-10-02', rarity: 'uncommon', tags: ['happy', 'cute'] },
+            { number: 3, name: 'Sleepy Petr', creator: 'Unknown', dateDropped: '2023-10-20', rarity: 'rare', tags: ['sleepy', 'cute'] },
+            { number: 4, name: 'Party Petr', creator: 'Student B', dateDropped: '2023-11-05', rarity: 'epic', tags: ['party', 'fun'] },
+            { number: 5, name: 'Golden Petr', creator: 'Unknown', dateDropped: '2023-11-18', rarity: 'legendary', tags: ['golden', 'rare'] },
+            { number: 6, name: 'Studying Petr', creator: 'Student C', dateDropped: '2023-09-22', rarity: 'common', tags: ['study', 'campus'] },
+            { number: 7, name: 'Coffee Petr', creator: 'Student D', dateDropped: '2023-10-10', rarity: 'uncommon', tags: ['coffee', 'caffeine'] },
+            { number: 8, name: 'Rainbow Petr', creator: 'Unknown', dateDropped: '2023-10-28', rarity: 'rare', tags: ['rainbow', 'colorful'] },
+            { number: 9, name: 'Winter Petr', creator: 'Student E', dateDropped: '2023-12-01', rarity: 'epic', tags: ['winter', 'seasonal'] },
+            { number: 10, name: 'Shiny Petr', creator: 'Unknown', dateDropped: '2023-11-25', rarity: 'legendary', tags: ['shiny', 'ultra-rare'] },
+            { number: 11, name: 'Graduation Petr', creator: 'Student F', dateDropped: '2023-09-08', rarity: 'common', tags: ['graduation', 'celebration'] },
+            { number: 12, name: 'Athletic Petr', creator: 'Unknown', dateDropped: '2023-10-15', rarity: 'uncommon', tags: ['sports', 'active'] },
+            { number: 13, name: 'Music Petr', creator: 'Student G', dateDropped: '2023-10-30', rarity: 'rare', tags: ['music', 'art'] },
+            { number: 14, name: 'Halloween Petr', creator: 'Unknown', dateDropped: '2023-10-31', rarity: 'epic', tags: ['halloween', 'seasonal'] },
+            { number: 15, name: 'Mythical Petr', creator: 'Unknown', dateDropped: '2023-12-15', rarity: 'legendary', tags: ['mythical', 'legend'] }
+        ];
+
+        let searchTerm = '';
+
+        function renderGallery() {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = '';
+
+            const filtered = petrs.filter(petr => {
+                const matchesSearch = !searchTerm || 
+                    petr.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    petr.number.toString().includes(searchTerm) ||
+                    petr.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+                return matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                gallery.innerHTML = `
+                    <div class="empty-state">
+                        <h2>No Petrs Found</h2>
+                        <p>Try adjusting your search or filter</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(petr => {
+                const card = document.createElement('div');
+                card.className = 'petr-card';
+                // Format date nicely
+                const date = new Date(petr.dateDropped);
+                const formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                
+                // Automatically generate image path based on entry number
+                const imagePath = `petr_images/${petr.number}.png`;
+                const imageHTML = `<img src="${imagePath}" alt="${petr.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'font-size: 4em; opacity: 0.3;\\'>🐾</div>';">`;
+                
+                card.innerHTML = `
+                    <div class="petr-number">#${String(petr.number).padStart(3, '0')}</div>
+                    <div class="petr-image">${imageHTML}</div>
+                    <div class="petr-name">${petr.name}</div>
+                    <div class="petr-info">
+                        <div class="info-item">
+                            <span class="info-label">Creator:</span>
+                            <span class="info-value">${petr.creator}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Date Dropped:</span>
+                            <span class="info-value">${formattedDate}</span>
+                        </div>
+                    </div>
+                    <div class="stats">
+                        ${petr.tags.map(tag => `<span class="stat">${tag}</span>`).join('')}
+                    </div>
+                `;
+                card.addEventListener('click', () => {
+                    alert(`Selected: ${petr.name} (#${String(petr.number).padStart(3, '0')})`);
+                });
+                gallery.appendChild(card);
+            });
+        }
+
+        // Search input
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            searchTerm = e.target.value;
+            renderGallery();
+        });
+
+        // Initialize
+        renderGallery();
+    </script>
+</body>
+</html>
