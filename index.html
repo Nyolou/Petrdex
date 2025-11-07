@@ -52,11 +52,17 @@
         align-items: center;
         z-index: 9999;
         opacity: 1;
-        transition: opacity 1s ease-out;
+        transition: all 0.8s ease-out;
       }
 
-      #welcome-screen.fade-out { opacity: 0; }
-      #welcome-screen.hidden { display: none; }
+      #welcome-screen.fade-out { 
+        opacity: 0;
+        pointer-events: none;
+      }
+      
+      #welcome-screen.hidden { 
+        display: none;
+      }
 
       #welcome-text {
         font-size: 3em;
@@ -127,13 +133,43 @@
         transform:translateY(-3px); box-shadow:0 6px 20px rgba(139,69,19,0.4);
         background:#b8945f; border-color:#a0844f;
       }
+
+      /* Page transition effects */
+      .fade-out-page {
+        opacity: 0 !important;
+        transition: opacity 0.3s ease-out;
+      }
+
+      body {
+        opacity: 1;
+        transition: opacity 0.3s ease-in;
+      }
+
+      #welcome-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* make sure it fills the screen without stretching */
+        z-index: 0;
+      }
+
+      #welcome-screen > * {
+        position: relative;
+        z-index: 1; /* ensures any overlay text/buttons go above video if needed */
+      }
+
     </style>
   </head>
   <body>
     <div id="welcome-screen">
-      <div id="welcome-text">Welcome to Petrdex!</div>
+      <video id="welcome-video" autoplay muted playsinline preload="auto">
+        <source src="./mainpage-banner1.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
     </div>
-    
+
     <div id="homepage-content">
       <div class="nav-buttons">
         <a href="index.html" class="nav-btn">Home</a>
@@ -161,11 +197,77 @@
       // ---------------- Welcome screen fade ----------------
       window.addEventListener('load', function() {
         const welcomeScreen = document.getElementById('welcome-screen');
-        setTimeout(function() {
+        const welcomeVideo = document.getElementById('welcome-video');
+        const homepageContent = document.getElementById('homepage-content');
+
+        // Initially hide homepage content
+        homepageContent.style.opacity = '0';
+        homepageContent.style.transition = 'opacity 1s ease-in';
+
+        // Error handling for video
+        welcomeVideo.addEventListener('error', function(e) {
+          console.error('Error loading video:', e);
+          // If video fails, show homepage immediately
+          showHomepage();
+        });
+
+        // Ensure video plays
+        welcomeVideo.play().catch(function(e) {
+          console.error('Error playing video:', e);
+          // If autoplay fails, show homepage
+          showHomepage();
+        });
+
+        // When video ends, fade out welcome screen and show homepage
+        welcomeVideo.addEventListener('ended', function() {
+          showHomepage();
+        });
+
+        function showHomepage() {
           welcomeScreen.classList.add('fade-out');
-          setTimeout(function() { welcomeScreen.classList.add('hidden'); }, 1000);
-        }, 1500);
+          // Show homepage content with minimal delay
+          setTimeout(() => {
+            homepageContent.style.opacity = '1';
+            // Remove welcome screen from DOM after fade
+            setTimeout(() => {
+              welcomeScreen.classList.add('hidden');
+            }, 800);
+          }, 200);
+        }
+
+        // Make sure page is visible when loaded
+        document.body.style.opacity = '1';
       });
+
+      // ---------------- Page Transition ----------------
+      // Add transition to all navigation links
+      function handleNavigation(e) {
+        const link = e.currentTarget;
+        // Don't handle external links or special cases
+        if (link.getAttribute('href').startsWith('http') || 
+            (link.id === 'loginBtn' && localStorage.getItem('loggedInUser'))) {
+          return;
+        }
+        
+        e.preventDefault();
+        const targetHref = link.getAttribute('href');
+        
+        // Fade out the current page
+        document.body.classList.add('fade-out-page');
+        
+        // Navigate after fade animation
+        setTimeout(() => {
+          window.location.href = targetHref;
+        }, 300);
+      }
+
+      // Apply to all navigation buttons
+      document.querySelectorAll('.nav-btn, .nav-button').forEach(btn => {
+        btn.addEventListener('click', handleNavigation);
+      });
+
+      // Ensure page fades in when loaded
+      document.body.style.opacity = '1';
 
       // ---------------- Login/Logout Button ----------------
       const loginBtn = document.getElementById('loginBtn');
